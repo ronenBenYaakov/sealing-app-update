@@ -1,0 +1,131 @@
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(to bottom, #b3ecff 0%, #0077be 100%);
+  color: #f0faff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.App {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  background-color: rgba(0, 119, 190, 0.85);
+  padding: 0.8rem 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  gap: 1rem;
+  user-select: none;
+}
+
+.logo {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.topbar h1 {
+  font-size: 1.8rem;
+  margin: 0;
+  color: #d4f1ff;
+  font-weight: 700;
+}
+
+.main-content {
+  flex: 1;
+  padding: 2rem 1rem;
+  background-color: rgba(0, 119, 190, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* Cards - full width and vertical stack */
+.card {
+  background: rgba(0, 95, 139, 0.8);
+  border-radius: 14px;
+  padding: 1.8rem 1.6rem;
+  box-shadow: 0 6px 15px rgba(0, 127, 191, 0.5);
+  color: #d4f1ff;
+  display: flex;
+  flex-direction: column;
+
+  /* Animation base */
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+  will-change: opacity, transform;
+  pointer-events: none; /* Disable interaction when hidden */
+}
+
+.card.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto; /* Enable interaction when visible */
+}
+
+.card h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: #a0d8ff;
+  font-weight: 700;
+  font-size: 1.4rem;
+}
+
+.card p {
+  margin: 0.4rem 0;
+  line-height: 1.45;
+  font-size: 1rem;
+}
+
+/* About card distinct color */
+.about-card {
+  background-color: #004b70;
+  box-shadow: 0 6px 22px rgba(0, 154, 255, 0.75);
+}
+
+.about-card.visible:hover {
+  background-color: #007acb;
+  box-shadow: 0 8px 28px rgba(0, 180, 255, 0.9);
+  transform: translateY(-6px);
+}
+
+.card:not(.about-card):hover.visible {
+  background-color: #006ba1;
+  box-shadow: 0 8px 22px rgba(0, 150, 255, 0.7);
+  transform: translateY(-4px);
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 1rem;
+  background-color: rgba(0, 0, 30, 0.3);
+  font-size: 0.9rem;
+  color: #a0d8ff;
+  user-select: none;
+}
+
+/* Responsive tweaks */
+@media (max-width: 480px) {
+  .topbar h1 {
+    font-size: 1.4rem;
+  }
+
+  .card {
+    padding: 1.4rem 1rem;
+  }
+
+  .main-content {
+    max-width: 90vw;
+    padding: 1rem;
+  }
+}
