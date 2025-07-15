@@ -20,7 +20,7 @@ body {
   background-color: rgba(0, 119, 190, 0.85);
   padding: 0.8rem 2rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-  gap: 1rem;
+  gap: 0rem;
   user-select: none;
 }
 
@@ -127,5 +127,52 @@ body {
   .main-content {
     max-width: 90vw;
     padding: 1rem;
+  }
+}
+
+.hamburger {
+  margin-left: auto;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  padding: 0.5rem;
+  z-index: 100;
+}
+
+.hamburger span {
+  display: block;
+  width: 24px;
+  height: 3px;
+  background-color: #d4f1ff;
+  border-radius: 2px;
+  transition: 0.3s ease;
+  transform-origin: center;
+}
+
+/* Animate to X when menu is open */
+.hamburger.open span:nth-child(1) {
+  transform: rotate(45deg) translateY(7px);
+}
+
+.hamburger.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.open span:nth-child(3) {
+  transform: rotate(-45deg) translateY(-7px);
+}
+
+@media (max-width: 768px) {
+  .hamburger {
+    padding: 0.3rem;
+  }
+
+  .hamburger span {
+    width: 20px;
+    height: 2.5px;
   }
 }
