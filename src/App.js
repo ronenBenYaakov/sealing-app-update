@@ -20,16 +20,15 @@ function FadeInCard({ children }) {
   }, []);
 
   return (
-    <div
-      ref={ref}
-      className={`card ${visible ? "visible" : "hidden"}`}
-    >
+    <div ref={ref} className={`card ${visible ? "visible" : "hidden"}`}>
       {children}
     </div>
   );
 }
 
 function App() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <div className="App">
       <header className="topbar">
@@ -39,14 +38,24 @@ function App() {
           alt="SEALing Logo"
         />
         <h1>SEALing</h1>
+
+        <button
+          className={`hamburger ${menuOpen ? "open" : ""}`}
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label="Toggle menu"
+        >
+          <span />
+          <span />
+          <span />
+        </button>
       </header>
 
       <main className="main-content">
         <FadeInCard>
           <h3>About SEALing</h3>
           <p>
-            SEALing specializes in embedded AI systems, advanced computer vision, and
-            state-of-the-art large language models. Our flagship technology is
+            SEALing specializes in embedded AI systems, advanced computer vision,
+            and state-of-the-art large language models. Our flagship technology is
             SEAL models — Self-Adapting Large Language Models that learn and evolve
             in real-time to adapt to new data and environments without costly retraining.
           </p>
