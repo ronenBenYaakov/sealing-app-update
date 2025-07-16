@@ -1,22 +1,27 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useNavigate,
+} from "react-router-dom";
+
+import ContactUs from "./ContactUs";
+import OurModels from "./OurModels";
 import "./App.css";
 
+// Fade-in animation for cards
 function FadeInCard({ children }) {
   const ref = useRef();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        setVisible(entry.isIntersecting);
-      },
+      ([entry]) => setVisible(entry.isIntersecting),
       { threshold: 0.1 }
     );
     if (ref.current) observer.observe(ref.current);
-
-    return () => {
-      if (ref.current) observer.unobserve(ref.current);
-    };
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -26,11 +31,32 @@ function FadeInCard({ children }) {
   );
 }
 
-function App() {
-  const [menuOpen, setMenuOpen] = useState(false);
+// Fullscreen menu overlay
+function MenuOverlay({ onClose }) {
+  const navigate = useNavigate();
+
+  const handleNavigate = (path) => {
+    onClose();
+    navigate(path);
+  };
 
   return (
-    <div className="App">
+    <div className="menu-overlay" onClick={onClose}>
+      <nav className="menu-content" onClick={(e) => e.stopPropagation()}>
+        <ul>
+          <li onClick={() => handleNavigate("/our-models")}>Our Models</li>
+          <li onClick={() => handleNavigate("/")}>About Us</li>
+          <li onClick={() => handleNavigate("/contact")}>Contact Us</li>
+        </ul>
+      </nav>
+    </div>
+  );
+}
+
+// Main homepage content
+function Home({ toggleMenu, menuOpen }) {
+  return (
+    <>
       <header className="topbar">
         <img
           className="logo"
@@ -38,10 +64,9 @@ function App() {
           alt="SEALing Logo"
         />
         <h1>SEALing</h1>
-
         <button
           className={`hamburger ${menuOpen ? "open" : ""}`}
-          onClick={() => setMenuOpen(!menuOpen)}
+          onClick={toggleMenu}
           aria-label="Toggle menu"
         >
           <span />
@@ -50,52 +75,57 @@ function App() {
         </button>
       </header>
 
+      {menuOpen && <MenuOverlay onClose={toggleMenu} />}
+
       <main className="main-content">
         <FadeInCard>
           <h3>About SEALing</h3>
           <p>
             SEALing specializes in embedded AI systems, advanced computer vision,
-            and state-of-the-art large language models. Our flagship technology is
-            SEAL models — Self-Adapting Large Language Models that learn and evolve
-            in real-time to adapt to new data and environments without costly retraining.
-          </p>
-          <p>
-            These dynamic models enable intelligent solutions embedded in devices,
-            powering smarter IoT, robotics, and autonomous systems with continual
-            learning and enhanced performance.
+            and large language models. Our SEAL models adapt in real time to new
+            data and environments without costly retraining.
           </p>
         </FadeInCard>
 
         <FadeInCard>
           <h3>Embedded AI Systems</h3>
-          <p>
-            We develop AI models optimized for embedded hardware, enabling fast,
-            efficient, and adaptive intelligence directly on devices at the edge.
-          </p>
+          <p>Fast, efficient AI models that run directly on devices at the edge.</p>
         </FadeInCard>
 
         <FadeInCard>
           <h3>Computer Vision</h3>
-          <p>
-            Our computer vision solutions leverage deep learning to provide accurate
-            object detection, scene understanding, and real-time video analytics.
-          </p>
+          <p>Deep learning for real-time scene understanding and object detection.</p>
         </FadeInCard>
 
         <FadeInCard>
           <h3>Self-Adapting LLMs</h3>
-          <p>
-            Our self-adapting language models continuously learn from new inputs,
-            enhancing language understanding and generation capabilities without
-            extensive retraining cycles.
-          </p>
+          <p>Language models that evolve with use — no retraining needed.</p>
         </FadeInCard>
       </main>
 
       <footer className="footer">
         © 2025 SEALing. All rights reserved.
       </footer>
-    </div>
+    </>
+  );
+}
+
+// Main App with routing
+function App() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const toggleMenu = () => setMenuOpen((prev) => !prev);
+
+  return (
+    <Router>
+      <Routes>
+        <Route
+          path="/"
+          element={<Home toggleMenu={toggleMenu} menuOpen={menuOpen} />}
+        />
+        <Route path="/contact" element={<ContactUs />} />
+        <Route path="/our-models" element={<OurModels />} />
+      </Routes>
+    </Router>
   );
 }
 
