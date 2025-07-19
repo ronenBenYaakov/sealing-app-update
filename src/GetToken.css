@@ -1,0 +1,85 @@
+.get-token-container {
+  background: linear-gradient(to bottom right, #0a84ff, #0059b2);
+  padding: 2rem;
+  border-radius: 16px;
+  max-width: 600px;
+  margin: 2rem auto;
+  color: #fff;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.get-token-title {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+}
+
+.get-token-button {
+  display: block;
+  margin: 0 auto 2rem auto;
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  background-color: #ffffff;
+  color: #0a84ff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s ease;
+}
+
+.get-token-button:hover:not(:disabled) {
+  background-color: #d0e6ff;
+}
+
+.get-token-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.generated-token-container {
+  background-color: rgba(255, 255, 255, 0.15);
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.generated-token {
+  font-family: monospace;
+  font-size: 0.95rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 0.5rem;
+  border-radius: 6px;
+  overflow-wrap: break-word;
+  color: #fff;
+}
+
+.token-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+}
+
+.token-copy-button {
+  padding: 0.4rem 0.8rem;
+  background-color: #fff;
+  color: #0a84ff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: 0.2s ease;
+}
+
+.token-copy-button:hover {
+  background-color: #d0e6ff;
+}
+
+.get-token-status {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 1rem;
+}

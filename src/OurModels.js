@@ -1,7 +1,10 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "./OurModels.css";
 
 function OurModels() {
+  const navigate = useNavigate();
+
   const projects = [
     {
       title: "🧠 SEAL-Lite",
@@ -17,6 +20,7 @@ function OurModels() {
       title: "🔁 AutoAdapt",
       description:
         "A continual learning engine that keeps your models updated in real-time — no retraining needed.",
+      hasButton: true, // Mark this for the redirect
     },
   ];
 
@@ -37,6 +41,14 @@ function OurModels() {
           <div className="model-card" key={idx}>
             <h3>{proj.title}</h3>
             <p>{proj.description}</p>
+            {proj.hasButton && (
+              <button
+                className="go-to-decksmith"
+                onClick={() => navigate("/decksmith")}
+              >
+                Learn More
+              </button>
+            )}
           </div>
         ))}
       </div>

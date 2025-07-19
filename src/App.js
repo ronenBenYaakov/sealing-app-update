@@ -8,6 +8,8 @@ import {
 
 import ContactUs from "./ContactUs";
 import OurModels from "./OurModels";
+import DeckSmith from "./DeckSmith";
+import GetToken from './GetToken';
 import "./App.css";
 
 // Fade-in animation for cards
@@ -45,6 +47,7 @@ function MenuOverlay({ onClose }) {
       <nav className="menu-content" onClick={(e) => e.stopPropagation()}>
         <ul>
           <li onClick={() => handleNavigate("/our-models")}>Our Models</li>
+          <li onClick={() => handleNavigate("/get-token")}>Get API Token</li>
           <li onClick={() => handleNavigate("/")}>About Us</li>
           <li onClick={() => handleNavigate("/contact")}>Contact Us</li>
         </ul>
@@ -124,6 +127,8 @@ function App() {
         />
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/our-models" element={<OurModels />} />
+        <Route path="/decksmith" element={<DeckSmith />} />
+        <Route path='/get-token' element={<GetToken/>} />
       </Routes>
     </Router>
   );
