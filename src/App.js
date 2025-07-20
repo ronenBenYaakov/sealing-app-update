@@ -9,10 +9,13 @@ import {
 import ContactUs from "./ContactUs";
 import OurModels from "./OurModels";
 import DeckSmith from "./DeckSmith";
-import GetToken from './GetToken';
+import GetToken from "./GetToken";
+import SignUp from './Signup'
+import Login from './Login'
+import SealPhotoCloudHome from './SealPhotoCloudHome'
 import "./App.css";
 
-// Fade-in animation for cards
+// Fade-in animation wrapper
 function FadeInCard({ children }) {
   const ref = useRef();
   const [visible, setVisible] = useState(false);
@@ -33,7 +36,7 @@ function FadeInCard({ children }) {
   );
 }
 
-// Fullscreen menu overlay
+// Overlay menu with links and login options
 function MenuOverlay({ onClose }) {
   const navigate = useNavigate();
 
@@ -51,12 +54,17 @@ function MenuOverlay({ onClose }) {
           <li onClick={() => handleNavigate("/")}>About Us</li>
           <li onClick={() => handleNavigate("/contact")}>Contact Us</li>
         </ul>
+        <div className="auth-buttons">
+          <button onClick={() => handleNavigate("/login")}>Login</button>
+          <button onClick={() => handleNavigate("/signup")}>Sign Up</button>
+        </div>
       </nav>
     </div>
   );
 }
 
-// Main homepage content
+
+// Home component
 function Home({ toggleMenu, menuOpen }) {
   return (
     <>
@@ -89,46 +97,45 @@ function Home({ toggleMenu, menuOpen }) {
             data and environments without costly retraining.
           </p>
         </FadeInCard>
-
         <FadeInCard>
           <h3>Embedded AI Systems</h3>
           <p>Fast, efficient AI models that run directly on devices at the edge.</p>
         </FadeInCard>
-
         <FadeInCard>
           <h3>Computer Vision</h3>
           <p>Deep learning for real-time scene understanding and object detection.</p>
         </FadeInCard>
-
         <FadeInCard>
           <h3>Self-Adapting LLMs</h3>
           <p>Language models that evolve with use — no retraining needed.</p>
         </FadeInCard>
       </main>
 
-      <footer className="footer">
-        © 2025 SEALing. All rights reserved.
-      </footer>
+      <footer className="footer">© 2025 SEALing. All rights reserved.</footer>
     </>
   );
 }
 
-// Main App with routing
-function App() {
+// Wrapper to toggle menu state for <Home />
+function HomeWrapper() {
   const [menuOpen, setMenuOpen] = useState(false);
   const toggleMenu = () => setMenuOpen((prev) => !prev);
+  return <Home toggleMenu={toggleMenu} menuOpen={menuOpen} />;
+}
 
+// App component with full routing
+function App() {
   return (
     <Router>
       <Routes>
-        <Route
-          path="/"
-          element={<Home toggleMenu={toggleMenu} menuOpen={menuOpen} />}
-        />
+        <Route path="/" element={<HomeWrapper />} />
+        <Route path="/Signup" element={<SignUp />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/our-models" element={<OurModels />} />
         <Route path="/decksmith" element={<DeckSmith />} />
-        <Route path='/get-token' element={<GetToken/>} />
+        <Route path="/get-token" element={<GetToken />} />
+        <Route path='/seal-photo-cloud-home' element={<SealPhotoCloudHome />} />
       </Routes>
     </Router>
   );

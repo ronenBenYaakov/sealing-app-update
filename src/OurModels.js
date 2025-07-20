@@ -7,20 +7,22 @@ function OurModels() {
 
   const projects = [
     {
-      title: "🧠 SEAL-Lite",
-      description:
-        "Ultra-compact LLM built for embedded and IoT environments. Blazing fast, low-memory footprint, and always context-aware.",
-    },
-    {
-      title: "👁️ VisionEdge",
+      title: "Photo Archive",
       description:
         "Real-time edge computer vision engine. Detect, track, and interpret visual data instantly with on-device intelligence.",
+      hasButton: true,
+      logo: "photoSeal.png",
+      logoClass: "vision-seal-logo",
+      route: "/seal-photo-cloud-home",  // 👈 NEW
     },
     {
-      title: "🔁 AutoAdapt",
+      title: "Auto Adapt",
       description:
-        "A continual learning engine that keeps your models updated in real-time — no retraining needed.",
-      hasButton: true, // Mark this for the redirect
+        "Our innovative continual learning platform enhances your existing Hugging Face models by leveraging a collective expertise system inspired by Decksmiths, improving performance continuously without increasing model size or storage requirements.",
+      hasButton: true,
+      logo: "DeckSmithSealLogo-removebg.png",
+      logoClass: "decksmith-logo",
+      route: "/decksmith",  // 👈 NEW
     },
   ];
 
@@ -39,12 +41,17 @@ function OurModels() {
       <div className="model-card-grid">
         {projects.map((proj, idx) => (
           <div className="model-card" key={idx}>
+            <img
+              src={`${process.env.PUBLIC_URL}/${proj.logo}`}
+              alt={`${proj.title} logo`}
+              className={proj.logoClass}
+            />
             <h3>{proj.title}</h3>
             <p>{proj.description}</p>
             {proj.hasButton && (
               <button
                 className="go-to-decksmith"
-                onClick={() => navigate("/decksmith")}
+                onClick={() => navigate(proj.route)}  // 👈 USE DYNAMIC ROUTE
               >
                 Learn More
               </button>

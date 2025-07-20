@@ -1,0 +1,124 @@
+@import url("https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap");
+
+.sketch-container {
+  height: 100vh;
+  width: 100vw;
+  background: #e3f1fb url("https://www.transparenttextures.com/patterns/pw-pattern.png") repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Patrick Hand', cursive;
+  user-select: none;
+  filter: grayscale(0.05);
+  padding: 2rem;
+}
+
+.sketch-doorframe {
+  background: #d9e9f8;
+  padding: 2rem 3rem;
+  max-width: 480px;
+  width: 90vw;
+  box-shadow:
+    0 0 0 3px #a3b9d1,
+    inset 0 0 15px 3px #c9dbf1;
+  border-radius: 15px;
+  filter:
+    drop-shadow(1px 1px 0 #7a8ebf)
+    drop-shadow(-1px -1px 0 #7a8ebf);
+  text-align: center;
+  position: relative;
+  border: 1.5px dashed #7a8ebf;
+  transition: box-shadow 0.3s ease;
+  animation: slight-shake 7s ease-in-out infinite;
+}
+
+.sketch-doorframe:hover {
+  box-shadow:
+    0 0 8px 2px #9eb8e1,
+    inset 0 0 25px 4px #a9c4e5;
+}
+
+.sketch-logo {
+  width: 130px;
+  margin-bottom: 1rem;
+  filter: grayscale(1) contrast(1.3) brightness(0.85) drop-shadow(1px 1px 0 #9db5e1);
+  image-rendering: crisp-edges;
+  user-select: none;
+}
+
+.sketch-title {
+  font-size: 3.2rem;
+  color: #476a9f;
+  margin: 0 0 0.4rem 0;
+  text-shadow:
+    1px 1px 0 #c0d1f9,
+    -1px -1px 0 #c0d1f9;
+  letter-spacing: 0.04em;
+}
+
+.sketch-tagline {
+  font-size: 1.15rem;
+  color: #6783b6;
+  margin-bottom: 2rem;
+  font-style: italic;
+}
+
+.sketch-upload-btn {
+  display: inline-block;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #3b4d7a;
+  background: #e2eafc;
+  padding: 1rem 3.5rem;
+  border-radius: 25px;
+  border: 2px dashed #7a8ebf;
+  box-shadow: inset 2px 2px 5px #bbc7f1;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+  user-select: none;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  outline: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.sketch-upload-btn:hover,
+.sketch-upload-btn:focus {
+  background: #d3dcf9;
+  box-shadow:
+    inset 3px 3px 8px #a5b7f0,
+    1px 1px 5px #778dce;
+  outline: 2px dotted #5b6fbb;
+  outline-offset: 4px;
+}
+
+.sketch-upload-btn input {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.sketch-status {
+  margin-top: 2.5rem;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1.1rem;
+  color: #5771a9;
+  min-height: 2em;
+  letter-spacing: 0.03em;
+  user-select: text;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  white-space: pre-wrap;
+}
+
+@keyframes slight-shake {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(1px, 0.5px) rotate(0.2deg); }
+  50% { transform: translate(-1px, -0.5px) rotate(-0.2deg); }
+  75% { transform: translate(0.5px, 1px) rotate(0.1deg); }
+}

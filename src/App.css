@@ -1,123 +1,191 @@
-
+/* Body & root - Antarctic theme */
 body {
   margin: 0;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(to bottom, #b3ecff 0%, #0077be 100%);
-  color: #f0faff;
+  font-family: 'Patrick Hand', cursive;
+  background: 
+    linear-gradient(to bottom, #e6f4ff 0%, #b3d9ff 100%),
+    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M0 0 L100 100 M100 0 L0 100" stroke="%23a8c6e5" stroke-width="0.8" opacity="0.2"/></svg>');
+  color: #1a3e5a;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  cursor: url("/public/sealLogo.png") 0 0, auto;
+  position: relative;
+  overflow-x: hidden;
 }
 
+/* Ice crystal overlay */
+body::before {
+  content: "";
+  pointer-events: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: 
+    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60"><path d="M30 0 L30 60 M0 30 L60 30 M10 10 L50 50 M50 10 L10 50" stroke="%236ba3d1" stroke-width="0.6" opacity="0.15"/></svg>'),
+    repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.15) 0,
+      rgba(255, 255, 255, 0.15) 2px,
+      transparent 2px,
+      transparent 12px
+    );
+  z-index: 1;
+}
 
+/* App container */
 .App {
   flex: 1;
   display: flex;
   flex-direction: column;
+  position: relative;
+  z-index: 10;
 }
 
+/* Topbar - Research Station Header */
 .topbar {
   display: flex;
   align-items: center;
-  background-color: rgba(0, 119, 190, 0.85);
+  background: rgba(0, 95, 139, 0.9);
   padding: 0.8rem 2rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-  gap: 0rem;
-  user-select: none;
+  box-shadow: 
+    3px 3px 0 #003f66,
+    inset 1px 1px 0 #a0d8ff;
+  border: 3px solid #a0d8ff;
+  border-radius: 14px;
+  margin: 1rem;
   position: relative;
-  z-index: 101;
+  user-select: none;
+  gap: 1rem;
+}
+
+.topbar::before {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  top: -6px; left: -6px; right: -6px; bottom: -6px;
+  border: 3px dashed #a0d8ff;
+  border-radius: 18px;
+  animation: sketchy-border-jitter 3s ease-in-out infinite;
+  opacity: 0.6;
 }
 
 .logo {
   width: 88px;
   height: 88px;
   object-fit: contain;
+  filter: sepia(30%) hue-rotate(-15deg) contrast(110%);
+  border: 3px solid #a0d8ff;
+  border-radius: 12px;
+  box-shadow: 
+    1px 1px 0 #004b70,
+    inset 1px 1px 0 #d4f1ff;
+  animation: float 4s ease-in-out infinite;
+  mix-blend-mode: multiply;
 }
 
 .topbar h1 {
-  font-size: 1.8rem;
-  margin: 0 1rem;
+  font-size: 2.2rem;
   color: #d4f1ff;
+  text-shadow: 
+    1px 1px 0 #004b70,
+    0 0 8px rgba(160, 216, 255, 0.6);
   font-weight: 700;
+  margin: 0;
 }
 
+/* Main content - Field Notebook */
 .main-content {
   flex: 1;
-  padding: 2rem 1rem;
-  background-color: rgba(0, 119, 190, 0.15);
+  padding: 2rem;
+  background: rgba(230, 242, 255, 0.7);
   display: flex;
   flex-direction: column;
-  gap: 1.8rem;
-  max-width: 700px;
-  margin: 0 auto;
+  gap: 2rem;
+  max-width: 800px;
+  margin: 1rem auto;
+  border: 2px solid #a8c6e5;
+  border-radius: 8px;
+  box-shadow: 
+    0 0 0 4px #d9ecff,
+    inset 0 0 20px rgba(0, 95, 139, 0.1);
+  position: relative;
 }
 
-/* Cards */
-.card {
-  background: rgba(0, 95, 139, 0.8);
-  border-radius: 14px;
-  padding: 1.8rem 1.6rem;
-  box-shadow: 0 6px 15px rgba(0, 127, 191, 0.5);
-  color: #d4f1ff;
-  display: flex;
-  flex-direction: column;
-  opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
-  will-change: opacity, transform;
+.main-content::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="20" viewBox="0 0 100 20"><path d="M0 10 L100 10" stroke="%23a8c6e5" stroke-width="0.5" stroke-dasharray="5,3"/></svg>');
+  opacity: 0.3;
   pointer-events: none;
 }
 
-.card.visible {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
+/* Field Notes Cards */
+.card {
+  background: #f0f9ff;
+  border-radius: 12px;
+  padding: 2.5rem;
+  box-shadow: 
+    0 0 0 3px #a8c6e5,
+    inset 0 0 15px rgba(0, 119, 190, 0.1);
+  color: #1a4b6e;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  position: relative;
+  border: 2px dashed #7a9bc2;
+  filter: 
+    drop-shadow(2px 2px 0 rgba(0, 95, 139, 0.1))
+    drop-shadow(-1px -1px 0 rgba(255, 255, 255, 0.3));
+  transition: all 0.3s ease;
+  animation: slight-shake 7s ease-in-out infinite;
+}
+
+.card:hover {
+  box-shadow: 
+    0 0 8px 2px #9eb8e1,
+    inset 0 0 25px rgba(0, 119, 190, 0.2);
+  transform: translateY(-3px);
 }
 
 .card h3 {
-  margin-top: 0;
-  margin-bottom: 1rem;
-  color: #a0d8ff;
+  font-size: 2rem;
+  margin: 0 0 1rem 0;
+  color: #005f8b;
+  text-shadow: 
+    1px 1px 0 rgba(160, 216, 255, 0.5);
   font-weight: 700;
-  font-size: 1.4rem;
+  border-bottom: 2px dashed #a8c6e5;
+  padding-bottom: 0.5rem;
 }
 
 .card p {
-  margin: 0.4rem 0;
-  line-height: 1.45;
-  font-size: 1rem;
+  margin: 0 auto;
+  max-width: 500px;
+  color: #3a6d99;
 }
 
-/* About card styling */
-.about-card {
-  background-color: #004b70;
-  box-shadow: 0 6px 22px rgba(0, 154, 255, 0.75);
-}
-
-.about-card.visible:hover {
-  background-color: #007acb;
-  box-shadow: 0 8px 28px rgba(0, 180, 255, 0.9);
-  transform: translateY(-6px);
-}
-
-.card:not(.about-card):hover.visible {
-  background-color: #006ba1;
-  box-shadow: 0 8px 22px rgba(0, 150, 255, 0.7);
-  transform: translateY(-4px);
-}
-
-/* Footer */
+/* Footer - Station Footer */
 .footer {
   text-align: center;
-  padding: 1rem;
-  background-color: rgba(0, 0, 30, 0.3);
+  padding: 1.5rem;
+  background-color: rgba(0, 95, 139, 0.8);
   font-size: 0.9rem;
-  color: #a0d8ff;
-  user-select: none;
+  color: #d4f1ff;
+  border-top: 2px dashed #a0d8ff;
+  position: relative;
 }
 
-/* Hamburger button */
+.footer::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #a0d8ff, transparent);
+}
+
+/* Hamburger Menu - Research Station Menu */
 .hamburger {
   margin-left: auto;
   background: none;
@@ -141,40 +209,22 @@ body {
   transform-origin: center;
 }
 
-.hamburger.open span:nth-child(1) {
-  transform: rotate(45deg) translateY(7px);
-}
-
-.hamburger.open span:nth-child(2) {
-  opacity: 0;
-}
-
-.hamburger.open span:nth-child(3) {
-  transform: rotate(-45deg) translateY(-7px);
-}
-
-/* Overlay menu */
+/* Menu Overlay - Station Blueprint */
 .menu-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(255, 255, 255, 0.95);
+  background: 
+    linear-gradient(rgba(230, 242, 255, 0.95), rgba(214, 234, 255, 0.95)),
+    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M0 0 L100 100 M100 0 L0 100" stroke="%236ba3d1" stroke-width="0.5" opacity="0.1"/></svg>');
   z-index: 100;
   display: flex;
   justify-content: center;
   align-items: center;
   animation: fadeIn 0.3s ease-in-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  color: #005f8b;
 }
 
 .menu-content ul {
@@ -187,36 +237,118 @@ body {
 .menu-content li {
   font-size: 2rem;
   margin: 1.5rem 0;
-  color: #000000;
   cursor: pointer;
-  transition: color 0.2s;
+  transition: all 0.3s;
+  position: relative;
+}
+
+.menu-content li::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #005f8b;
+  transition: width 0.3s;
 }
 
 .menu-content li:hover {
-  color: #0077be;
+  color: #003f66;
 }
 
-/* Responsive tweaks */
+.menu-content li:hover::after {
+  width: 100%;
+}
+
+/* Auth Buttons - Expedition Tools */
+.auth-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+
+.auth-buttons button {
+  background: none;
+  color: #005f8b;
+  font-size: 1.2rem;
+  padding: 0.8rem 1.8rem;
+  border: 3px solid #005f8b;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Patrick Hand', cursive;
+  box-shadow: 
+    2px 2px 0 #003f66,
+    inset 1px 1px 0 #d4f1ff;
+  transition: all 0.3s;
+  position: relative;
+}
+
+.auth-buttons button:hover {
+  background: rgba(0, 95, 139, 0.1);
+  box-shadow: 
+    4px 4px 0 #003f66,
+    inset 1px 1px 0 #d4f1ff;
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes slight-shake {
+  0%, 100% { transform: translate(0, 0) rotate(0); }
+  25% { transform: translate(1px, 1px) rotate(0.5deg); }
+  50% { transform: translate(-1px, 0.5px) rotate(-0.5deg); }
+  75% { transform: translate(0.5px, -1px) rotate(0.3deg); }
+}
+
+@keyframes sketchy-border-jitter {
+  0%, 100% {
+    clip-path: polygon(
+      0% 0%, 100% 0%, 100% 6%, 6% 6%, 6% 94%, 100% 94%, 100% 100%, 0% 100%
+    );
+  }
+  50% {
+    clip-path: polygon(
+      0% 0%, 100% 0%, 100% 9%, 9% 9%, 9% 91%, 100% 91%, 100% 100%, 0% 100%
+    );
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-  .hamburger {
-    padding: 0.3rem;
+  .topbar {
+    padding: 0.6rem 1rem;
+    margin: 0.5rem;
   }
-
-  .hamburger span {
-    width: 20px;
-    height: 2.5px;
+  
+  .logo {
+    width: 60px;
+    height: 60px;
   }
-
+  
   .topbar h1 {
-    font-size: 1.4rem;
+    font-size: 1.5rem;
   }
-
-  .card {
-    padding: 1.4rem 1rem;
-  }
-
+  
   .main-content {
-    max-width: 90vw;
-    padding: 1rem;
+    padding: 1.5rem;
+    margin: 0.5rem;
+  }
+  
+  .card {
+    padding: 1.5rem;
+  }
+  
+  .menu-content li {
+    font-size: 1.5rem;
   }
 }

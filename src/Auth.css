@@ -1,0 +1,195 @@
+/* Auth.css - Antarctic Research Station Theme */
+
+.auth-container {
+  max-width: 400px;
+  margin: 4rem auto;
+  background: 
+    linear-gradient(to bottom, rgba(214, 234, 255, 0.95), rgba(198, 226, 255, 0.95)),
+    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M0 0 L100 100 M100 0 L0 100" stroke="%236ba3d1" stroke-width="0.5" opacity="0.1"/></svg>');
+  padding: 2.5rem 2rem;
+  border-radius: 12px;
+  border: 3px solid #a8c6e5;
+  box-shadow: 
+    0 0 0 4px #d9ecff,
+    5px 5px 0 rgba(0, 95, 139, 0.3),
+    inset 0 0 15px rgba(0, 119, 190, 0.1);
+  color: #1a4b6e;
+  font-family: 'Patrick Hand', cursive;
+  position: relative;
+  animation: slight-shake 7s ease-in-out infinite;
+}
+
+.auth-container::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  right: -6px;
+  bottom: -6px;
+  border: 2px dashed #a8c6e5;
+  border-radius: 16px;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.auth-container h2 {
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  font-size: 2rem;
+  text-align: center;
+  color: #005f8b;
+  text-shadow: 
+    1px 1px 0 rgba(160, 216, 255, 0.5);
+  border-bottom: 2px dashed #a8c6e5;
+  padding-bottom: 0.5rem;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.auth-form label {
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 0.4rem;
+  color: #3a6d99;
+}
+
+.auth-form input[type="email"],
+.auth-form input[type="password"] {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 2px solid #a8c6e5;
+  font-size: 1rem;
+  background-color: rgba(230, 242, 255, 0.8);
+  color: #1a4b6e;
+  outline: none;
+  transition: all 0.3s ease;
+  font-family: 'Patrick Hand', cursive;
+  box-shadow: 
+    inset 2px 2px 3px rgba(0, 95, 139, 0.1);
+}
+
+.auth-form input[type="email"]:focus,
+.auth-form input[type="password"]:focus {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-color: #6ba3d1;
+  box-shadow: 
+    inset 2px 2px 3px rgba(0, 95, 139, 0.1),
+    0 0 8px rgba(107, 163, 209, 0.6);
+}
+
+.auth-form button {
+  margin-top: 1rem;
+  padding: 0.85rem;
+  background: #0077be;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #d4f1ff;
+  cursor: pointer;
+  font-family: 'Patrick Hand', cursive;
+  box-shadow: 
+    3px 3px 0 #004b70,
+    inset 1px 1px 0 #a0d8ff;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-form button:hover {
+  background: #005f8a;
+  transform: translate(-1px, -1px);
+  box-shadow: 
+    4px 4px 0 #003f66,
+    inset 1px 1px 0 #a0d8ff;
+}
+
+.auth-form button:active {
+  transform: translate(1px, 1px);
+  box-shadow: 
+    1px 1px 0 #004b70,
+    inset 1px 1px 0 #a0d8ff;
+}
+
+.auth-error {
+  margin-top: 0.5rem;
+  color: #d64040;
+  font-weight: 700;
+  font-size: 1rem;
+  text-align: center;
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+/* Link to switch between login/signup */
+.auth-switch {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 1rem;
+  color: #3a6d99;
+}
+
+.auth-switch a {
+  color: #005f8b;
+  font-weight: 700;
+  text-decoration: none;
+  margin-left: 0.3rem;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.auth-switch a::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #005f8b;
+  transition: width 0.3s ease;
+}
+
+.auth-switch a:hover {
+  color: #003f66;
+}
+
+.auth-switch a:hover::after {
+  width: 100%;
+}
+
+/* Field Notes Illustration */
+.auth-illustration {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.auth-illustration svg {
+  width: 80px;
+  height: 80px;
+  opacity: 0.8;
+  filter: sepia(30%) hue-rotate(-15deg) contrast(110%);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .auth-container {
+    margin: 2rem 1rem;
+    padding: 2rem 1.5rem;
+    border-width: 2px;
+  }
+  
+  .auth-container h2 {
+    font-size: 1.8rem;
+  }
+}
+
+/* Animations */
+@keyframes slight-shake {
+  0%, 100% { transform: translate(0, 0) rotate(0); }
+  25% { transform: translate(1px, 1px) rotate(0.5deg); }
+  50% { transform: translate(-1px, 0.5px) rotate(-0.5deg); }
+  75% { transform: translate(0.5px, -1px) rotate(0.3deg); }
+}
