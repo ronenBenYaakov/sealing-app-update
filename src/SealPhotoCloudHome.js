@@ -26,7 +26,7 @@ export default function SealPhotoCloudHome() {
     formData.append("file", file);
 
     try {
-      const response = await fetch("https://721c4cc86e23.ngrok-free.app/upload-photos", {
+      const response = await fetch("https://termite-next-grackle.ngrok-free.app/upload-photos", {
         method: "POST",
         body: formData,
       });

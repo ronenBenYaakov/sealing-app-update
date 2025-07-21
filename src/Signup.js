@@ -13,7 +13,7 @@ export default function Signup() {
     setError(null);
 
     try {
-      const res = await fetch("https://721c4cc86e23.ngrok-free.app/signup", {
+      const res = await fetch("https://termite-next-grackle.ngrok-free.app/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),

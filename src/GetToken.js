@@ -11,7 +11,7 @@ export default function GetToken() {
     setIsLoading(true);
 
     try {
-      const res = await fetch('https://721c4cc86e23.ngrok-free.app/token-archive');
+      const res = await fetch('https://termite-next-grackle.ngrok-free.app/token-archive');
       if (!res.ok) {
         setStatus(`❌ Failed to fetch token: ${res.statusText}`);
         setIsLoading(false);
@@ -32,7 +32,7 @@ export default function GetToken() {
     } finally {
       setTimeout(() => {
         setIsLoading(false);
-      }, 2000); // freeze for 2 extra seconds
+      }, 20000); // freeze for 20 extra seconds
     }
   };
 

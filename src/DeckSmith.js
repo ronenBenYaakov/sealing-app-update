@@ -20,7 +20,7 @@ const DeckSmith = () => {
     setIsAuthenticated(false);
 
     try {
-      const res = await fetch('https://721c4cc86e23.ngrok-free.app/tokens');
+      const res = await fetch('https://termite-next-grackle.ngrok-free.app/tokens');
       if (!res.ok) {
         setAuthStatus(`❌ Failed to verify token: ${res.statusText}`);
         return;
@@ -51,7 +51,7 @@ const DeckSmith = () => {
     formData.append('file', file);
 
     try {
-      const response = await fetch('https://721c4cc86e23.ngrok-free.app/upload', {
+      const response = await fetch('https://termite-next-grackle.ngrok-free.app/upload', {
         method: 'POST',
         body: formData,
         headers: {
@@ -80,7 +80,7 @@ const DeckSmith = () => {
     formData.append('file', file);
 
     try {
-      const response = await fetch('https://721c4cc86e23.ngrok-free.app/upload', {
+      const response = await fetch('https://termite-next-grackle.ngrok-free.app/upload', {
         method: 'POST',
         body: formData,
         headers: {
