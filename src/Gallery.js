@@ -5,6 +5,7 @@ export default function Gallery() {
   const [folders, setFolders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [downloading, setDownloading] = useState(null);
 
   const fetchFolders = useCallback(async () => {
     try {
@@ -16,36 +17,23 @@ export default function Gallery() {
 
       const apiUrl = `https://termite-next-grackle.ngrok-free.app/list-folders?email=${encodeURIComponent(email)}`;
       
-      console.log("Attempting to fetch from:", apiUrl); // Debug log
-
       const response = await fetch(apiUrl, {
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'ngrok-skip-browser-warning': 'true' // Bypass ngrok warning
+          'ngrok-skip-browser-warning': 'true'
         },
-        credentials: 'include' // If using cookies
+        credentials: 'include'
       });
 
-      const responseText = await response.text();
+      const data = await response.json();
       
-      try {
-        const data = JSON.parse(responseText);
-        
-        if (!response.ok) {
-          throw new Error(data.message || `Server error: ${response.status}`);
-        }
-
-        if (!Array.isArray(data.folders)) {
-          throw new Error("Invalid data format received from server");
-        }
-
-        setFolders(data.folders);
-        setError(null);
-      } catch (jsonError) {
-        console.error("Failed to parse JSON:", responseText);
-        throw new Error(`Server returned: ${responseText.substring(0, 100)}...`);
+      if (!response.ok) {
+        throw new Error(data.message || `Server error: ${response.status}`);
       }
+
+      setFolders(data.folders || []);
+      setError(null);
     } catch (err) {
       console.error("Fetch error:", err);
       setError(err.message);
@@ -54,10 +42,43 @@ export default function Gallery() {
     }
   }, []);
 
+  const downloadFolder = async (folderName) => {
+    try {
+      setDownloading(folderName);
+      const email = localStorage.getItem("userEmail");
+      const response = await fetch(
+        `https://termite-next-grackle.ngrok-free.app/download-folder?email=${encodeURIComponent(email)}&folder=${encodeURIComponent(folderName)}`,
+        {
+          headers: {
+            'ngrok-skip-browser-warning': 'true'
+          }
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to download folder');
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${folderName}.zip`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      a.remove();
+    } catch (err) {
+      console.error("Download error:", err);
+      setError(`Failed to download ${folderName}: ${err.message}`);
+    } finally {
+      setDownloading(null);
+    }
+  };
+
   useEffect(() => {
     fetchFolders();
   }, [fetchFolders]);
-
 
   const handleRetry = () => {
     setLoading(true);
@@ -96,7 +117,14 @@ export default function Gallery() {
           {folders.map((folder, idx) => (
             <li key={idx}>
               <span className="folder-icon">📁</span>
-              {folder}
+              <button
+                onClick={() => downloadFolder(folder)}
+                disabled={downloading === folder}
+                className="folder-link"
+              >
+                {folder}
+                {downloading === folder && ' (Downloading...)'}
+              </button>
             </li>
           ))}
         </ul>

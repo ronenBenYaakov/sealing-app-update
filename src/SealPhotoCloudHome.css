@@ -248,12 +248,12 @@
 /* Buttons Container */
 .sketch-buttons-container {
   display: flex;
-  flex-direction: column;
-  gap: 15px;
+  justify-content: center; /* This centers the buttons horizontally */
+  gap: 1rem; /* This adds consistent spacing between buttons */
   width: 100%;
-  max-width: 300px;
-  margin: 0 auto 20px;
+  margin: 1rem 0;
 }
+
 
 /* View Gallery Button - matches upload button style */
 button.sketch-upload-btn {
