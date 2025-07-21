@@ -1,101 +1,48 @@
-import React, { useState } from 'react';
-import './DeckSmith.css';
+import React, { useState } from "react";
+import "./DeckSmith.css";
 
-const DeckSmith = () => {
-  const [token, setToken] = useState('');
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [status1, setStatus1] = useState('');
-  const [status2, setStatus2] = useState('');
-  const [authStatus, setAuthStatus] = useState('');
+export default function DeckSmith() {
+  const username = localStorage.getItem("userEmail") || "Unknown User";
+  const [statusModel, setStatusModel] = useState("");
+  const [statusTokenizer, setStatusTokenizer] = useState("");
 
-  const handleAuthenticate = async () => {
-    if (token.trim() === '') {
-      alert('Please enter a token first!');
-      return;
-    }
-
-    setAuthStatus('Verifying token...');
-    setStatus1('');
-    setStatus2('');
-    setIsAuthenticated(false);
-
-    try {
-      const res = await fetch('https://termite-next-grackle.ngrok-free.app/tokens');
-      if (!res.ok) {
-        setAuthStatus(`❌ Failed to verify token: ${res.statusText}`);
-        return;
-      }
-
-      const data = await res.json();
-      if (data.tokens && data.tokens.includes(token.trim())) {
-        setIsAuthenticated(true);
-        setAuthStatus('✅ Token authenticated successfully!');
-      } else {
-        setIsAuthenticated(false);
-        setAuthStatus('❌ Token not found or invalid.');
-      }
-    } catch (error) {
-      console.error('Error verifying token:', error);
-      setAuthStatus('⚠️ Error verifying token.');
-      setIsAuthenticated(false);
-    }
-  };
-
-  const handleUpload1 = async (event) => {
-    if (!isAuthenticated) return;
-
+  const handleUpload = async (event, type) => {
     const file = event.target.files[0];
     if (!file) return;
 
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append("file", file);
+    formData.append("username", username);
 
     try {
-      const response = await fetch('https://termite-next-grackle.ngrok-free.app/upload', {
-        method: 'POST',
-        body: formData,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        "https://termite-next-grackle.ngrok-free.app/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       if (response.ok) {
-        setStatus1('✅ Model ZIP file uploaded successfully!');
+        if (type === "model") {
+          setStatusModel("✅ Model ZIP file uploaded successfully!");
+        } else {
+          setStatusTokenizer("✅ Tokenizer ZIP file uploaded successfully!");
+        }
       } else {
-        setStatus1('❌ Model Zip file upload failed.');
+        if (type === "model") {
+          setStatusModel("❌ Model ZIP file upload failed.");
+        } else {
+          setStatusTokenizer("❌ Tokenizer ZIP file upload failed.");
+        }
       }
     } catch (error) {
-      console.error('Error uploading Zip file 1:', error);
-      setStatus1('⚠️ An error occurred uploading Zip file 1.');
-    }
-  };
-
-  const handleUpload2 = async (event) => {
-    if (!isAuthenticated) return;
-
-    const file = event.target.files[0];
-    if (!file) return;
-
-    const formData = new FormData();
-    formData.append('file', file);
-
-    try {
-      const response = await fetch('https://termite-next-grackle.ngrok-free.app/upload', {
-        method: 'POST',
-        body: formData,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (response.ok) {
-        setStatus2('✅ Tokenizer Zip file uploaded successfully!');
+      console.error(`Error uploading ${type} ZIP file:`, error);
+      if (type === "model") {
+        setStatusModel("⚠️ An error occurred uploading model ZIP file.");
       } else {
-        setStatus2('❌ Tokenizer Zip file upload failed.');
+        setStatusTokenizer("⚠️ An error occurred uploading tokenizer ZIP file.");
       }
-    } catch (error) {
-      console.error('Error uploading Zip file 2:', error);
-      setStatus2('⚠️ An error occurred uploading Zip file 2.');
     }
   };
 
@@ -109,67 +56,30 @@ const DeckSmith = () => {
         />
         <h1 className="decksmith-title">DeckSmith</h1>
         <p className="decksmith-subtitle">Forge your decks with power.</p>
+        <p className="decksmith-user">Logged in as: <strong>{username}</strong></p>
 
-        <label htmlFor="token-input" className="decksmith-token-label">
-          Enter your token:
-        </label>
-        <input
-          type="text"
-          id="token-input"
-          value={token}
-          onChange={(e) => {
-            setToken(e.target.value);
-            setIsAuthenticated(false); // Reset auth if token changes
-            setAuthStatus('');
-          }}
-          placeholder="Enter your token here"
-          className="decksmith-token-input"
-        />
-        <button onClick={handleAuthenticate} className="decksmith-auth-button">
-          Authenticate
-        </button>
-        <p className="decksmith-status">{authStatus}</p>
-
-        <label
-          className="decksmith-button"
-          tabIndex={0}
-          style={{
-            opacity: isAuthenticated ? 1 : 0.5,
-            pointerEvents: isAuthenticated ? 'auto' : 'none',
-          }}
-        >
+        <label className="decksmith-upload-label">
           Upload HuggingFace Model ZIP File
           <input
             type="file"
             accept=".zip"
-            onChange={handleUpload1}
-            className="decksmith-input"
-            disabled={!isAuthenticated}
+            onChange={(e) => handleUpload(e, "model")}
+            className="decksmith-upload-input"
           />
         </label>
-        <p className="decksmith-status">{status1}</p>
+        {statusModel && <p className="decksmith-status">{statusModel}</p>}
 
-        <label
-          className="decksmith-button"
-          tabIndex={0}
-          style={{
-            opacity: isAuthenticated ? 1 : 0.5,
-            pointerEvents: isAuthenticated ? 'auto' : 'none',
-          }}
-        >
-          Upload HuggingFace Tokenizer Zip File
+        <label className="decksmith-upload-label">
+          Upload HuggingFace Tokenizer ZIP File
           <input
             type="file"
             accept=".zip"
-            onChange={handleUpload2}
-            className="decksmith-input"
-            disabled={!isAuthenticated}
+            onChange={(e) => handleUpload(e, "tokenizer")}
+            className="decksmith-upload-input"
           />
         </label>
-        <p className="decksmith-status">{status2}</p>
+        {statusTokenizer && <p className="decksmith-status">{statusTokenizer}</p>}
       </div>
     </div>
   );
-};
-
-export default DeckSmith;
+}

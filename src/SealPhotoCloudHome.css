@@ -149,6 +149,7 @@
   position: relative;
   overflow: hidden;
   text-transform: uppercase;
+  font-family: 'Patrick Hand', cursive; /* Add this line */
 }
 
 .sketch-upload-btn:hover,
@@ -242,4 +243,82 @@
   .sketch-upload-btn {
     padding: 0.9rem 2.5rem;
   }
+}
+
+/* Buttons Container */
+.sketch-buttons-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto 20px;
+}
+
+/* View Gallery Button - matches upload button style */
+button.sketch-upload-btn {
+  display: inline-block;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: #1a4b6e;
+  background: linear-gradient(to bottom, #e2eafc, #d3dcf9);
+  padding: 1.2rem 4rem;
+  border-radius: 30px;
+  border: 3px dashed #7a9bc2;
+  box-shadow: 
+    inset 2px 2px 5px rgba(0, 95, 139, 0.1),
+    3px 3px 0 rgba(0, 95, 139, 0.2);
+  transition: all 0.3s ease;
+  user-select: none;
+  letter-spacing: 0.05em;
+  position: relative;
+  overflow: hidden;
+  text-transform: uppercase;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+button.sketch-upload-btn:hover,
+button.sketch-upload-btn:focus {
+  background: linear-gradient(to bottom, #d3dcf9, #c4d0f5);
+  box-shadow: 
+    inset 3px 3px 8px rgba(0, 95, 139, 0.15),
+    4px 4px 0 rgba(0, 95, 139, 0.25);
+  outline: 2px dotted #5b6fbb;
+  outline-offset: 4px;
+  transform: translate(-1px, -1px);
+}
+
+button.sketch-upload-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: 
+    inset 2px 2px 5px rgba(0, 95, 139, 0.1),
+    1px 1px 0 rgba(0, 95, 139, 0.2);
+}
+
+/* Make the label button full width */
+label.sketch-upload-btn {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Responsive adjustments for buttons */
+@media (max-width: 768px) {
+  button.sketch-upload-btn,
+  label.sketch-upload-btn {
+    padding: 1rem 3rem;
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  button.sketch-upload-btn,
+  label.sketch-upload-btn {
+    padding: 0.9rem 2.5rem;
+  }
+}
+
+button.sketch-upload-btn {
+  font-family: inherit; /* This will inherit from .sketch-upload-btn */
 }

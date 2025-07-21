@@ -365,3 +365,22 @@
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+
+.decksmith-upload-label {
+  display: block;
+  margin-bottom: 1.25rem;
+  padding: 0.8rem 1rem;
+  background: rgb(140, 173, 246);
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.25s ease;
+}
+
+.decksmith-upload-label:hover {
+  background: #0f1c35;
+}
+
+.decksmith-upload-input {
+  display: none;
+}
