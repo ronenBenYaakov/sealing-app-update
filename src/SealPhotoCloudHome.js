@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import "./SealPhotoCloudHome.css";
-import { useNavigate } from "react-router-dom"; // Add this import
+import { useNavigate } from "react-router-dom";
+import JSZip from "jszip";
+
 
 export default function SealPhotoCloudHome() {
   const [status, setStatus] = useState("");
   const [typedStatus, setTypedStatus] = useState("");
-  const navigate = useNavigate(); // Initialize the navigate function
+  const navigate = useNavigate();
 
   const handleUpload = async (event) => {
-    const file = event.target.files[0];
+    const files = event.target.files;
     const email = localStorage.getItem("userEmail");
 
     if (!email) {
@@ -16,16 +18,25 @@ export default function SealPhotoCloudHome() {
       return;
     }
 
-    if (!file || !file.name.endsWith(".zip")) {
-      setStatus("Please upload a valid .zip file.");
+    if (!files || files.length === 0) {
+      setStatus("No files selected.");
       return;
     }
 
-    setStatus(`Uploading "${file.name}"...`);
+    setStatus(`Preparing files for upload...`);
+
+    // Create ZIP
+    const zip = new JSZip();
+    for (const file of files) {
+      zip.file(file.name, file);
+    }
+
+    // Generate the zip blob
+    const zipBlob = await zip.generateAsync({ type: "blob" });
 
     const formData = new FormData();
     formData.append("email", email);
-    formData.append("file", file);
+    formData.append("file", new File([zipBlob], "upload.zip", { type: "application/zip" }));
 
     try {
       const response = await fetch("https://termite-next-grackle.ngrok-free.app/upload-photos", {
@@ -34,37 +45,33 @@ export default function SealPhotoCloudHome() {
       });
 
       const result = await response.json();
-      setStatus(result.message || "Upload complete! 📦");
+      setStatus(result.message || `Upload complete ✅`);
     } catch (error) {
       console.error("Upload error:", error);
-      setStatus("Upload failed ❌. Check console.");
+      setStatus(`Upload failed ❌`);
     }
   };
 
   const handleViewGallery = () => {
-    // Check if user is logged in
     const email = localStorage.getItem("userEmail");
     if (!email) {
       setStatus("Please log in to view your gallery");
       return;
     }
-    
-    // Navigate to gallery page
-    navigate("/gallery"); // Make sure you have this route set up in your router
-    
-    // Alternatively, you could use window.location if not using React Router:
-    // window.location.href = '/gallery';
+    navigate("/gallery");
   };
 
   useEffect(() => {
     let i = 0;
     setTypedStatus("");
     if (!status) return;
+
     const interval = setInterval(() => {
       setTypedStatus((prev) => prev + status.charAt(i));
       i++;
       if (i > status.length) clearInterval(interval);
     }, 40);
+
     return () => clearInterval(interval);
   }, [status]);
 
@@ -81,23 +88,23 @@ export default function SealPhotoCloudHome() {
 
         <div className="sketch-buttons-container">
           <label className="sketch-upload-btn" tabIndex={0}>
-            Upload Zip Archive
-            <input 
-              type="file" 
-              accept=".zip" 
-              onChange={handleUpload} 
-              style={{ display: 'none' }} // Hide the default file input
+            Upload Files
+            <input
+              type="file"
+              multiple
+              onChange={handleUpload}
+              style={{ display: "none" }}
             />
           </label>
 
-          <button 
-            className="sketch-upload-btn" 
+          <button
+            className="sketch-upload-btn"
             onClick={handleViewGallery}
             style={{
-              fontFamily: "'Patrick Hand', cursive", // Explicitly set the font
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center'
+              fontFamily: "'Patrick Hand', cursive",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
             View Gallery
