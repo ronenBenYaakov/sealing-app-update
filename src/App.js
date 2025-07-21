@@ -12,7 +12,7 @@ import DeckSmith from "./DeckSmith";
 import GetToken from "./GetToken";
 import SignUp from './Signup'
 import Login from './Login'
-import Gallery from './Gallery'
+import SealPhotoCloudHome from './SealPhotoCloudHome'
 import "./App.css";
 
 // Fade-in animation wrapper
@@ -135,7 +135,7 @@ function App() {
         <Route path="/our-models" element={<OurModels />} />
         <Route path="/decksmith" element={<DeckSmith />} />
         <Route path="/get-token" element={<GetToken />} />
-        <Route path='/gallery' element={<Gallery />} />
+        <Route path='/seal-photo-cloud-home' element={<SealPhotoCloudHome />} />
       </Routes>
     </Router>
   );
