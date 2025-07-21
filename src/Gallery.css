@@ -125,3 +125,37 @@
     grid-template-columns: 1fr;
   }
 }
+
+.cookie-consent-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #222;
+  color: #fff;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  z-index: 1000;
+}
+
+.cookie-consent-banner p {
+  margin: 0;
+  flex-grow: 1;
+}
+
+.cookie-consent-banner button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-left: 15px;
+}
+
+.cookie-consent-banner button:hover {
+  background-color: #45a049;
+}
