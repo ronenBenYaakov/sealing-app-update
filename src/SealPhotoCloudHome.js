@@ -41,10 +41,13 @@ export default function SealPhotoCloudHome() {
     );
 
     try {
-      const response = await fetch("https://termite-next-grackle.ngrok-free.app/upload-photos", {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        "https://termite-next-grackle.ngrok-free.app/upload-photos",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       const result = await response.json();
       setStatus(result.message || `Upload complete ✅`);
@@ -52,6 +55,10 @@ export default function SealPhotoCloudHome() {
       console.error("Upload error:", error);
       setStatus(`Upload failed ❌`);
     }
+  };
+
+  const handleViewGallery = () => {
+    navigate("/gallery");
   };
 
   useEffect(() => {
@@ -89,6 +96,14 @@ export default function SealPhotoCloudHome() {
               style={{ display: "none" }}
             />
           </label>
+
+          <button
+            className="sketch-upload-btn"
+            onClick={handleViewGallery}
+            style={{ marginLeft: "1rem" }}
+          >
+            View Gallery
+          </button>
         </div>
 
         <p className="sketch-status" aria-live="polite">
