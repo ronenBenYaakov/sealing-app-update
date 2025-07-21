@@ -14,7 +14,6 @@ import SignUp from './Signup'
 import Login from './Login'
 import SealPhotoCloudHome from './SealPhotoCloudHome'
 import Gallery from './Gallery'
-import CookieConcent from './CookieConcent'
 import "./App.css";
 
 // Fade-in animation wrapper
@@ -128,7 +127,6 @@ function HomeWrapper() {
 // App component with full routing
 function App() {
   return (
-    <>
     <Router>
       <Routes>
         <Route path="/" element={<HomeWrapper />} />
@@ -142,8 +140,6 @@ function App() {
         <Route path='/gallery' element={<Gallery />} />
       </Routes>
     </Router>
-    <CookieConsent />
-    </>
   );
 }
 
