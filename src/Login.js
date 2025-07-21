@@ -13,7 +13,7 @@ export default function Login() {
     setError(null);
 
     try {
-      const res = await fetch("http://localhost:3001/login", {
+      const res = await fetch("https://721c4cc86e23.ngrok-free.app/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
@@ -28,7 +28,7 @@ export default function Login() {
           setError(data.detail || "Login failed");
         }
       } else {
-        // Login successful, redirect to /home
+        localStorage.setItem("userEmail", username);
         navigate("/");
       }
     } catch {

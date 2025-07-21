@@ -11,7 +11,7 @@ export default function GetToken() {
     setIsLoading(true);
 
     try {
-      const res = await fetch('http://localhost:3001/token-archive');
+      const res = await fetch('https://721c4cc86e23.ngrok-free.app/token-archive');
       if (!res.ok) {
         setStatus(`❌ Failed to fetch token: ${res.statusText}`);
         setIsLoading(false);

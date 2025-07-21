@@ -13,7 +13,7 @@ export default function Signup() {
     setError(null);
 
     try {
-      const res = await fetch("http://localhost:3001/signup", {
+      const res = await fetch("https://721c4cc86e23.ngrok-free.app/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
@@ -28,7 +28,7 @@ export default function Signup() {
           setError(data.detail || "Signup failed");
         }
       } else {
-        // Signup successful, redirect to /home
+        localStorage.setItem("userEmail", username);  // <-- save email here
         navigate("/");
       }
     } catch {

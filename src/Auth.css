@@ -193,3 +193,25 @@
   50% { transform: translate(-1px, 0.5px) rotate(-0.5deg); }
   75% { transform: translate(0.5px, -1px) rotate(0.3deg); }
 }
+
+.auth-form input[type="text"] {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 2px solid #a8c6e5;
+  font-size: 1rem;
+  background-color: rgba(230, 242, 255, 0.8);
+  color: #1a4b6e;
+  outline: none;
+  transition: all 0.3s ease;
+  font-family: 'Patrick Hand', cursive;
+  box-shadow: 
+    inset 2px 2px 3px rgba(0, 95, 139, 0.1);
+}
+
+.auth-form input[type="text"]:focus {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-color: #6ba3d1;
+  box-shadow: 
+    inset 2px 2px 3px rgba(0, 95, 139, 0.1),
+    0 0 8px rgba(107, 163, 209, 0.6);
+}

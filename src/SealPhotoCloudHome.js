@@ -5,16 +5,38 @@ export default function SealPhotoCloudHome() {
   const [status, setStatus] = useState("");
   const [typedStatus, setTypedStatus] = useState("");
 
-  const handleUpload = (event) => {
+  const handleUpload = async (event) => {
     const file = event.target.files[0];
+    const email = localStorage.getItem("userEmail"); // <-- get email from localStorage
+
+    if (!email) {
+      setStatus("User email not found. Please log in.");
+      return;
+    }
+
     if (!file || !file.name.endsWith(".zip")) {
       setStatus("Please upload a valid .zip file.");
       return;
     }
+
     setStatus(`Uploading "${file.name}"...`);
-    setTimeout(() => {
-      setStatus("Upload complete! 📦✏️");
-    }, 1800);
+
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("file", file);
+
+    try {
+      const response = await fetch("https://721c4cc86e23.ngrok-free.app/upload-photos", {
+        method: "POST",
+        body: formData,
+      });
+
+      const result = await response.json();
+      setStatus(result.message || "Upload complete! 📦");
+    } catch (error) {
+      console.error("Upload error:", error);
+      setStatus("Upload failed ❌. Check console.");
+    }
   };
 
   useEffect(() => {
@@ -33,7 +55,7 @@ export default function SealPhotoCloudHome() {
     <div className="sketch-container">
       <div className="sketch-doorframe">
         <img
-          src={`${process.env.PUBLIC_URL}/sealLogo.png`}
+          src={`${process.env.PUBLIC_URL}/photoSeal.png`}
           alt="Seal Logo"
           className="sketch-logo"
         />

@@ -3,109 +3,188 @@
 .sketch-container {
   height: 100vh;
   width: 100vw;
-  background: #e3f1fb url("https://www.transparenttextures.com/patterns/pw-pattern.png") repeat;
+  background: 
+    linear-gradient(135deg, #e3f1fb 0%, #d0e4f5 100%),
+    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M0 0 L100 100 M100 0 L0 100" stroke="%236ba3d1" stroke-width="0.5" opacity="0.1"/></svg>');
   display: flex;
   justify-content: center;
   align-items: center;
   font-family: 'Patrick Hand', cursive;
   user-select: none;
-  filter: grayscale(0.05);
   padding: 2rem;
-}
-
-.sketch-doorframe {
-  background: #d9e9f8;
-  padding: 2rem 3rem;
-  max-width: 480px;
-  width: 90vw;
-  box-shadow:
-    0 0 0 3px #a3b9d1,
-    inset 0 0 15px 3px #c9dbf1;
-  border-radius: 15px;
-  filter:
-    drop-shadow(1px 1px 0 #7a8ebf)
-    drop-shadow(-1px -1px 0 #7a8ebf);
-  text-align: center;
-  position: relative;
-  border: 1.5px dashed #7a8ebf;
-  transition: box-shadow 0.3s ease;
-  animation: slight-shake 7s ease-in-out infinite;
-}
-
-.sketch-doorframe:hover {
-  box-shadow:
-    0 0 8px 2px #9eb8e1,
-    inset 0 0 25px 4px #a9c4e5;
-}
-
-.sketch-logo {
-  width: 130px;
-  margin-bottom: 1rem;
-  filter: grayscale(1) contrast(1.3) brightness(0.85) drop-shadow(1px 1px 0 #9db5e1);
-  image-rendering: crisp-edges;
-  user-select: none;
-}
-
-.sketch-title {
-  font-size: 3.2rem;
-  color: #476a9f;
-  margin: 0 0 0.4rem 0;
-  text-shadow:
-    1px 1px 0 #c0d1f9,
-    -1px -1px 0 #c0d1f9;
-  letter-spacing: 0.04em;
-}
-
-.sketch-tagline {
-  font-size: 1.15rem;
-  color: #6783b6;
-  margin-bottom: 2rem;
-  font-style: italic;
-}
-
-.sketch-upload-btn {
-  display: inline-block;
-  cursor: pointer;
-  font-weight: 700;
-  font-size: 1.2rem;
-  color: #3b4d7a;
-  background: #e2eafc;
-  padding: 1rem 3.5rem;
-  border-radius: 25px;
-  border: 2px dashed #7a8ebf;
-  box-shadow: inset 2px 2px 5px #bbc7f1;
-  transition: background 0.3s ease, box-shadow 0.3s ease;
-  user-select: none;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  outline: none;
   position: relative;
   overflow: hidden;
 }
 
+/* Ice crystal overlay */
+.sketch-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60"><path d="M30 0 L30 60 M0 30 L60 30 M10 10 L50 50 M50 10 L10 50" stroke="%236ba3d1" stroke-width="0.6" opacity="0.08"/></svg>');
+  pointer-events: none;
+  animation: crystalPulse 12s ease-in-out infinite;
+}
+
+@keyframes crystalPulse {
+  0%, 100% { opacity: 0.08; }
+  50% { opacity: 0.15; }
+}
+
+.sketch-doorframe {
+  background: 
+    linear-gradient(to bottom, rgba(214, 234, 255, 0.95), rgba(198, 226, 255, 0.95));
+  padding: 3rem 3.5rem;
+  max-width: 500px;
+  width: 90vw;
+  border-radius: 18px;
+  border: 3px solid #a8c6e5;
+  box-shadow: 
+    0 0 0 5px #d9ecff,
+    6px 6px 0 rgba(0, 95, 139, 0.25),
+    inset 0 0 20px rgba(0, 119, 190, 0.15),
+    0 10px 30px rgba(0, 95, 139, 0.2);
+  text-align: center;
+  position: relative;
+  animation: slight-shake 8s ease-in-out infinite;
+  z-index: 10;
+}
+
+/* Hand-drawn border effect */
+.sketch-doorframe::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  right: -8px;
+  bottom: -8px;
+  border: 3px dashed #a8c6e5;
+  border-radius: 22px;
+  pointer-events: none;
+  opacity: 0.6;
+  animation: borderPulse 5s ease-in-out infinite;
+}
+
+@keyframes borderPulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.01); }
+}
+
+.sketch-logo {
+  width: 160px;
+  margin-bottom: 1.5rem;
+  filter: sepia(30%) hue-rotate(-15deg) contrast(110%) drop-shadow(2px 2px 3px rgba(0, 95, 139, 0.3));
+  border: 3px solid #a8c6e5;
+  border-radius: 15px;
+  box-shadow: 
+    2px 2px 0 #004b70,
+    inset 2px 2px 0 #d4f1ff,
+    0 0 20px rgba(160, 216, 255, 0.4);
+  animation: float 5s ease-in-out infinite, logoGlow 8s ease-in-out infinite;
+  transition: transform 0.3s ease;
+}
+
+.sketch-logo:hover {
+  transform: scale(1.05) rotate(2deg);
+}
+
+@keyframes logoGlow {
+  0%, 100% { box-shadow: 0 0 20px rgba(160, 216, 255, 0.4); }
+  50% { box-shadow: 0 0 30px rgba(160, 216, 255, 0.6); }
+}
+
+.sketch-title {
+  font-size: 3rem;
+  color: #005f8b;
+  margin: 0 0 0.5rem 0;
+  text-shadow: 
+    1px 1px 0 rgba(160, 216, 255, 0.5),
+    0 0 10px rgba(160, 216, 255, 0.3);
+  letter-spacing: 0.04em;
+  border-bottom: 3px dashed #a8c6e5;
+  padding-bottom: 0.75rem;
+  position: relative;
+}
+
+.sketch-title::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 25%;
+  right: 25%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #a8c6e5, transparent);
+}
+
+.sketch-tagline {
+  font-size: 1.25rem;
+  color: #3a6d99;
+  margin-bottom: 2.5rem;
+  font-style: italic;
+  line-height: 1.5;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+/* Expedition Upload Button */
+.sketch-upload-btn {
+  display: inline-block;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: #1a4b6e;
+  background: linear-gradient(to bottom, #e2eafc, #d3dcf9);
+  padding: 1.2rem 4rem;
+  border-radius: 30px;
+  border: 3px dashed #7a9bc2;
+  box-shadow: 
+    inset 2px 2px 5px rgba(0, 95, 139, 0.1),
+    3px 3px 0 rgba(0, 95, 139, 0.2);
+  transition: all 0.3s ease;
+  user-select: none;
+  letter-spacing: 0.05em;
+  position: relative;
+  overflow: hidden;
+  text-transform: uppercase;
+}
+
 .sketch-upload-btn:hover,
 .sketch-upload-btn:focus {
-  background: #d3dcf9;
-  box-shadow:
-    inset 3px 3px 8px #a5b7f0,
-    1px 1px 5px #778dce;
+  background: linear-gradient(to bottom, #d3dcf9, #c4d0f5);
+  box-shadow: 
+    inset 3px 3px 8px rgba(0, 95, 139, 0.15),
+    4px 4px 0 rgba(0, 95, 139, 0.25);
   outline: 2px dotted #5b6fbb;
   outline-offset: 4px;
+  transform: translate(-1px, -1px);
+}
+
+.sketch-upload-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: 
+    inset 2px 2px 5px rgba(0, 95, 139, 0.1),
+    1px 1px 0 rgba(0, 95, 139, 0.2);
 }
 
 .sketch-upload-btn input {
   position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
+  top: 0; 
+  left: 0;
+  width: 100%; 
+  height: 100%;
   opacity: 0;
   cursor: pointer;
 }
 
+/* Research Station Status Display */
 .sketch-status {
   margin-top: 2.5rem;
   font-family: 'Courier New', Courier, monospace;
   font-size: 1.1rem;
-  color: #5771a9;
+  color: #3a6d99;
   min-height: 2em;
   letter-spacing: 0.03em;
   user-select: text;
@@ -114,11 +193,53 @@
   margin-right: auto;
   text-align: center;
   white-space: pre-wrap;
+  padding: 1rem;
+  background: rgba(214, 234, 255, 0.7);
+  border-radius: 10px;
+  border: 3px dashed #7a9bc2;
+  box-shadow: 
+    inset 0 0 10px rgba(0, 95, 139, 0.1),
+    0 0 10px rgba(0, 95, 139, 0.1);
 }
 
 @keyframes slight-shake {
-  0%, 100% { transform: translate(0, 0); }
-  25% { transform: translate(1px, 0.5px) rotate(0.2deg); }
-  50% { transform: translate(-1px, -0.5px) rotate(-0.2deg); }
-  75% { transform: translate(0.5px, 1px) rotate(0.1deg); }
+  0%, 100% { transform: translate(0, 0) rotate(0); }
+  25% { transform: translate(1px, 1px) rotate(0.5deg); }
+  50% { transform: translate(-1px, 0.5px) rotate(-0.5deg); }
+  75% { transform: translate(0.5px, -1px) rotate(0.3deg); }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .sketch-doorframe {
+    padding: 2.5rem 2rem;
+  }
+
+  .sketch-title {
+    font-size: 2.5rem;
+  }
+
+  .sketch-tagline {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+  }
+
+  .sketch-upload-btn {
+    padding: 1rem 3rem;
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .sketch-doorframe {
+    padding: 2rem 1.5rem;
+  }
+  
+  .sketch-title {
+    font-size: 2.2rem;
+  }
+  
+  .sketch-upload-btn {
+    padding: 0.9rem 2.5rem;
+  }
 }
