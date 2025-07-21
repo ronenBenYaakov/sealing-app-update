@@ -3,7 +3,6 @@ import "./SealPhotoCloudHome.css";
 import { useNavigate } from "react-router-dom";
 import JSZip from "jszip";
 
-
 export default function SealPhotoCloudHome() {
   const [status, setStatus] = useState("");
   const [typedStatus, setTypedStatus] = useState("");
@@ -36,7 +35,10 @@ export default function SealPhotoCloudHome() {
 
     const formData = new FormData();
     formData.append("email", email);
-    formData.append("file", new File([zipBlob], "upload.zip", { type: "application/zip" }));
+    formData.append(
+      "file",
+      new File([zipBlob], "upload.zip", { type: "application/zip" })
+    );
 
     try {
       const response = await fetch("https://termite-next-grackle.ngrok-free.app/upload-photos", {
@@ -50,15 +52,6 @@ export default function SealPhotoCloudHome() {
       console.error("Upload error:", error);
       setStatus(`Upload failed ❌`);
     }
-  };
-
-  const handleViewGallery = () => {
-    const email = localStorage.getItem("userEmail");
-    if (!email) {
-      setStatus("Please log in to view your gallery");
-      return;
-    }
-    navigate("/gallery");
   };
 
   useEffect(() => {
@@ -96,19 +89,6 @@ export default function SealPhotoCloudHome() {
               style={{ display: "none" }}
             />
           </label>
-
-          <button
-            className="sketch-upload-btn"
-            onClick={handleViewGallery}
-            style={{
-              fontFamily: "'Patrick Hand', cursive",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            View Gallery
-          </button>
         </div>
 
         <p className="sketch-status" aria-live="polite">

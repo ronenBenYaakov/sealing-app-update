@@ -12,7 +12,6 @@ import DeckSmith from "./DeckSmith";
 import GetToken from "./GetToken";
 import SignUp from './Signup'
 import Login from './Login'
-import SealPhotoCloudHome from './SealPhotoCloudHome'
 import Gallery from './Gallery'
 import "./App.css";
 
@@ -136,7 +135,6 @@ function App() {
         <Route path="/our-models" element={<OurModels />} />
         <Route path="/decksmith" element={<DeckSmith />} />
         <Route path="/get-token" element={<GetToken />} />
-        <Route path='/seal-photo-cloud-home' element={<SealPhotoCloudHome />} />
         <Route path='/gallery' element={<Gallery />} />
       </Routes>
     </Router>
