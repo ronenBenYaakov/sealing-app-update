@@ -13,8 +13,8 @@ function Gallery() {
       setError(null);
       
       // Add timestamp to prevent caching issues
-      const apiUrl = `https://termite-next-grackle.ngrok-free.app/gallery?timestamp=${Date.now()}`;
-      
+      const userEmail = localStorage.getItem('userEmail');
+      const apiUrl = `https://termite-next-grackle.ngrok-free.app/gallery?email=${encodeURIComponent(userEmail)}&timestamp=${Date.now()}`;      
       const response = await fetch(apiUrl, {
         headers: {
           'Accept': 'application/json',
