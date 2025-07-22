@@ -11,7 +11,7 @@ export default function GetToken() {
     setIsLoading(true);
 
     try {
-      const res = await fetch('https://termite-next-grackle.ngrok-free.app/token-archive');
+      const res = await fetch('https://yearly-notable-newt.ngrok-free.app/token-archive');
       if (!res.ok) {
         setStatus(`❌ Failed to fetch token: ${res.statusText}`);
         setIsLoading(false);

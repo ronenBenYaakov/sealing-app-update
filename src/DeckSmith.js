@@ -16,7 +16,7 @@ export default function DeckSmith() {
 
     try {
       const response = await fetch(
-        "https://termite-next-grackle.ngrok-free.app/upload",
+        "https://yearly-notable-newt.ngrok-free.app/upload",
         {
           method: "POST",
           body: formData,
