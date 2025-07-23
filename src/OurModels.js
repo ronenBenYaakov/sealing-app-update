@@ -12,7 +12,7 @@ function OurModels() {
       description:
         "Advanced autonomous agent framework that enables intelligent decision-making and task automation in dynamic environments.",
       hasButton: true,
-      logo: "agentGoMascot.png", // Make sure to add this image to your public folder
+      logo: "AgentGoMascot.png", // Make sure to add this image to your public folder
       logoClass: "agent-go-logo",
       route: "/agent-go", // You'll need to set up this route in your router
     },
