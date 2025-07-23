@@ -1,49 +1,72 @@
-/* Contact.css - Antarctic Research Station Theme */
-
+/* Contact.css - High-Tech Research Station Theme */
 .contact-container {
-  max-width: 800px;
+  max-width: 900px;
   margin: 3rem auto;
-  padding: 2.5rem;
-  background: 
-    linear-gradient(to bottom, rgba(230, 242, 255, 0.95), rgba(214, 234, 255, 0.95)),
-    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M0 0 L100 100 M100 0 L0 100" stroke="%236ba3d1" stroke-width="0.5" opacity="0.1"/></svg>');
-  border-radius: 12px;
-  border: 3px solid #a8c6e5;
+  padding: 3rem;
+  background: rgba(15, 23, 42, 0.9);
+  border-radius: 16px;
+  border: 1px solid rgba(59, 130, 246, 0.3);
   box-shadow: 
-    0 0 0 4px #d9ecff,
-    5px 5px 0 rgba(0, 95, 139, 0.3),
-    inset 0 0 15px rgba(0, 119, 190, 0.1);
-  color: #1a4b6e;
-  font-family: 'Patrick Hand', cursive;
+    0 15px 40px rgba(0, 0, 0, 0.4),
+    inset 0 0 20px rgba(59, 130, 246, 0.1);
+  color: #e0f2fe;
+  font-family: 'Rajdhani', 'Segoe UI', sans-serif;
   position: relative;
-  animation: slight-shake 7s ease-in-out infinite;
+  backdrop-filter: blur(8px);
+  overflow: hidden;
+  z-index: 10;
 }
 
 .contact-container::before {
   content: "";
   position: absolute;
-  top: -6px;
-  left: -6px;
-  right: -6px;
-  bottom: -6px;
-  border: 2px dashed #a8c6e5;
-  border-radius: 16px;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+}
+
+.contact-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.08) 0%, transparent 40%);
   pointer-events: none;
-  opacity: 0.7;
+  z-index: -1;
 }
 
 .contact-container h2 {
-  font-size: 2.2rem;
-  margin-bottom: 2rem;
-  color: #005f8b;
+  font-size: 2.4rem;
+  margin-bottom: 2.5rem;
   text-align: center;
-  text-shadow: 
-    1px 1px 0 rgba(160, 216, 255, 0.5);
-  border-bottom: 2px dashed #a8c6e5;
-  padding-bottom: 0.5rem;
+  color: transparent;
+  background: linear-gradient(90deg, #93c5fd, #60a5fa);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 0.5px;
+  position: relative;
+  padding-bottom: 1rem;
 }
 
-/* Contact Cards - Research Team Cards */
+.contact-container h2::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 2px;
+  background: linear-gradient(90deg, #3b82f6, transparent);
+}
+
+/* Research Team Cards */
 .contact-cards {
   display: flex;
   justify-content: center;
@@ -53,49 +76,64 @@
 }
 
 .contact-card {
-  background: #e6f2ff;
+  background: rgba(30, 41, 59, 0.8);
   border-radius: 12px;
-  padding: 1.8rem;
-  box-shadow: 
-    0 0 0 3px #a8c6e5,
-    inset 0 0 15px rgba(0, 119, 190, 0.1);
-  color: #1a4b6e;
-  min-width: 220px;
-  flex: 1 1 240px;
+  padding: 2rem;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  color: #e0f2fe;
+  min-width: 240px;
+  flex: 1 1 260px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  border: 2px dashed #7a9bc2;
+  gap: 1.2rem;
   position: relative;
   transition: all 0.3s ease;
+  box-shadow: 
+    0 5px 15px rgba(0, 0, 0, 0.2),
+    inset 0 0 0 1px rgba(59, 130, 246, 0.2);
+  overflow: hidden;
+}
+
+.contact-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
 }
 
 .contact-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-8px);
   box-shadow: 
-    0 0 8px 2px #9eb8e1,
-    inset 0 0 25px rgba(0, 119, 190, 0.2);
+    0 15px 25px rgba(0, 0, 0, 0.3),
+    inset 0 0 0 1px rgba(59, 130, 246, 0.3);
 }
 
 .contact-card h3 {
   margin-bottom: 0.5rem;
-  color: #005f8b;
-  font-size: 1.4rem;
-  font-weight: 700;
+  color: #93c5fd;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
 }
 
 .contact-card p {
-  color: #3a6d99;
+  color: #a8c6e5;
   text-align: center;
-  margin-bottom: 1rem;
+  margin-bottom: 1.2rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
 }
 
-/* Contact Form - Expedition Message Form */
+/* Contact Form - Secure Transmission */
 .contact-form {
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
+  gap: 1.5rem;
+  align-items: center;
 }
 
 .message-box {
@@ -103,69 +141,70 @@
 }
 
 .message-box h3 {
-  margin-bottom: 1rem;
-  color: #005f8b;
-  font-size: 1.4rem;
+  margin-bottom: 1.5rem;
+  color: #93c5fd;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
 }
 
 .contact-form label {
-  font-weight: 700;
-  color: #3a6d99;
-  font-size: 1.1rem;
+  display: block;
+  font-weight: 500;
+  color: #93c5fd;
+  font-size: 1rem;
+  margin-bottom: 0.8rem;
+  letter-spacing: 0.3px;
 }
 
 .contact-form input,
 .contact-form textarea,
 .message-box textarea {
   width: 100%;
-  padding: 0.8rem 1rem;
+  padding: 1rem 1.2rem;
   border-radius: 8px;
-  border: 2px solid #a8c6e5;
+  border: 1px solid rgba(59, 130, 246, 0.3);
   font-size: 1rem;
-  font-family: 'Patrick Hand', cursive;
-  background-color: rgba(230, 242, 255, 0.8);
-  color: #1a4b6e;
+  font-family: inherit;
+  background: rgba(30, 41, 59, 0.8);
+  color: #e0f2fe;
   transition: all 0.3s ease;
-  box-shadow: 
-    inset 2px 2px 3px rgba(0, 95, 139, 0.1);
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 .contact-form textarea,
 .message-box textarea {
-  min-height: 120px;
+  min-height: 150px;
   resize: vertical;
 }
 
 .contact-form input:focus,
 .contact-form textarea:focus,
 .message-box textarea:focus {
-  background-color: rgba(255, 255, 255, 0.9);
-  border-color: #6ba3d1;
+  border-color: #3b82f6;
   box-shadow: 
-    inset 2px 2px 3px rgba(0, 95, 139, 0.1),
-    0 0 8px rgba(107, 163, 209, 0.6);
+    inset 0 0 10px rgba(0, 0, 0, 0.2),
+    0 0 0 2px rgba(59, 130, 246, 0.2);
   outline: none;
 }
 
-/* Buttons - Expedition Equipment Style */
+/* Buttons - Secure Transmission */
 .contact-card button,
 .contact-form button,
 .message-box button {
-  background: #0077be;
-  color: #d4f1ff;
+  background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+  color: white;
   border: none;
-  padding: 0.75rem 1.5rem;
+  padding: 1rem 2rem;
   border-radius: 8px;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 1.1rem;
   cursor: pointer;
-  font-family: 'Patrick Hand', cursive;
-  box-shadow: 
-    3px 3px 0 #004b70,
-    inset 1px 1px 0 #a0d8ff;
+  letter-spacing: 0.5px;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 5px 15px rgba(30, 58, 138, 0.4);
 }
 
 .message-box button {
@@ -175,26 +214,54 @@
 
 .contact-card button:hover,
 .contact-form button:hover {
-  background: #005f8a;
-  transform: translate(-1px, -1px);
-  box-shadow: 
-    4px 4px 0 #003f66,
-    inset 1px 1px 0 #a0d8ff;
+  background: linear-gradient(135deg, #1e3a8a 0%, #172554 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(30, 58, 138, 0.5);
 }
 
 .contact-card button:active,
 .contact-form button:active {
-  transform: translate(1px, 1px);
-  box-shadow: 
-    1px 1px 0 #004b70,
-    inset 1px 1px 0 #a0d8ff;
+  transform: translateY(0);
+}
+
+.contact-card button::before,
+.contact-form button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: 0.5s;
+}
+
+.contact-card button:hover::before,
+.contact-form button:hover::before {
+  left: 100%;
+}
+
+/* Grid pattern overlay */
+.grid-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    linear-gradient(rgba(59, 130, 246, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59, 130, 246, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  opacity: 0.3;
+  z-index: -1;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
   .contact-container {
     margin: 2rem 1rem;
-    padding: 1.8rem;
+    padding: 2rem 1.5rem;
   }
   
   .contact-cards {
@@ -204,12 +271,35 @@
   .contact-card {
     min-width: 100%;
   }
+  
+  .contact-container h2 {
+    font-size: 2rem;
+  }
 }
 
-/* Animations */
-@keyframes slight-shake {
-  0%, 100% { transform: translate(0, 0) rotate(0); }
-  25% { transform: translate(1px, 1px) rotate(0.5deg); }
-  50% { transform: translate(-1px, 0.5px) rotate(-0.5deg); }
-  75% { transform: translate(0.5px, -1px) rotate(0.3deg); }
+/* Status indicator */
+.status-indicator {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: #93c5fd;
+}
+
+.status-light {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 10px #10b981;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
 }

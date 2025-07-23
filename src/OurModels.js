@@ -10,7 +10,7 @@ function OurModels() {
     {
       title: "Agent Go",
       description:
-        "Advanced autonomous agent framework that enables intelligent decision-making and task automation in dynamic environments.",
+        "Our SmartSearch AI Agent is a cutting-edge neural search system that combines state-of-the-art natural language understanding with proprietary knowledge retrieval algorithms. Designed for precision and contextual awareness, it delivers human-like comprehension of complex queries while maintaining enterprise-grade reliability.",
       hasButton: true,
       logo: "AgentGoMascot.png", // Make sure to add this image to your public folder
       logoClass: "agent-go-logo",
@@ -20,7 +20,7 @@ function OurModels() {
     {
       title: "Photo Archive",
       description:
-        "Real-time edge computer vision engine. Detect, track, and interpret visual data instantly with on-device intelligence.",
+        "Our NeuralSqueeze™ technology delivers unprecedented 25:1 loss-optimized image compression using deep perceptual networks, maintaining visual fidelity at file sizes previously considered impossible. This breakthrough transforms digital asset management by reducing storage needs while preserving critical image details.",
       hasButton: true,
       logo: "photoSeal.png",
       logoClass: "vision-seal-logo",

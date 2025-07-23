@@ -1,22 +1,22 @@
-@import url("https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap");
 
 .sketch-container {
   height: 100vh;
   width: 100vw;
   background: 
-    linear-gradient(135deg, #e3f1fb 0%, #d0e4f5 100%),
-    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M0 0 L100 100 M100 0 L0 100" stroke="%236ba3d1" stroke-width="0.5" opacity="0.1"/></svg>');
+    linear-gradient(135deg, #0a192f 0%, #172a45 100%),
+    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M0 0 L100 100 M100 0 L0 100 M50 0 L50 100 M0 50 L100 50" stroke="%233b82f6" stroke-width="0.3" opacity="0.1"/></svg>');
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: 'Patrick Hand', cursive;
+  font-family: 'Orbitron', sans-serif;
   user-select: none;
   padding: 2rem;
   position: relative;
   overflow: hidden;
 }
 
-/* Ice crystal overlay */
+/* Holographic grid overlay */
 .sketch-container::before {
   content: "";
   position: absolute;
@@ -25,66 +25,55 @@
   right: 0;
   bottom: 0;
   background: 
-    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60"><path d="M30 0 L30 60 M0 30 L60 30 M10 10 L50 50 M50 10 L10 50" stroke="%236ba3d1" stroke-width="0.6" opacity="0.08"/></svg>');
+    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60"><path d="M30 0 L30 60 M0 30 L60 30 M10 10 L50 50 M50 10 L10 50" stroke="%233b82f6" stroke-width="0.3" opacity="0.08"/></svg>');
   pointer-events: none;
-  animation: crystalPulse 12s ease-in-out infinite;
+  animation: gridPulse 15s ease-in-out infinite;
 }
 
-@keyframes crystalPulse {
+@keyframes gridPulse {
   0%, 100% { opacity: 0.08; }
   50% { opacity: 0.15; }
 }
 
 .sketch-doorframe {
-  background: 
-    linear-gradient(to bottom, rgba(214, 234, 255, 0.95), rgba(198, 226, 255, 0.95));
-  padding: 3rem 3.5rem;
-  max-width: 500px;
+  background: rgba(15, 23, 42, 0.9);
+  padding: 4rem;
+  max-width: 600px;
   width: 90vw;
-  border-radius: 18px;
-  border: 3px solid #a8c6e5;
+  border-radius: 20px;
+  border: 1px solid rgba(59, 130, 246, 0.4);
   box-shadow: 
-    0 0 0 5px #d9ecff,
-    6px 6px 0 rgba(0, 95, 139, 0.25),
-    inset 0 0 20px rgba(0, 119, 190, 0.15),
-    0 10px 30px rgba(0, 95, 139, 0.2);
+    0 20px 50px rgba(0, 0, 0, 0.5),
+    inset 0 0 30px rgba(59, 130, 246, 0.2),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
   text-align: center;
   position: relative;
-  animation: slight-shake 8s ease-in-out infinite;
+  backdrop-filter: blur(10px);
   z-index: 10;
 }
 
-/* Hand-drawn border effect */
+/* Neon top border */
 .sketch-doorframe::before {
   content: "";
   position: absolute;
-  top: -8px;
-  left: -8px;
-  right: -8px;
-  bottom: -8px;
-  border: 3px dashed #a8c6e5;
-  border-radius: 22px;
-  pointer-events: none;
-  opacity: 0.6;
-  animation: borderPulse 5s ease-in-out infinite;
-}
-
-@keyframes borderPulse {
-  0%, 100% { opacity: 0.6; transform: scale(1); }
-  50% { opacity: 0.8; transform: scale(1.01); }
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
 }
 
 .sketch-logo {
-  width: 160px;
-  margin-bottom: 1.5rem;
-  filter: sepia(30%) hue-rotate(-15deg) contrast(110%) drop-shadow(2px 2px 3px rgba(0, 95, 139, 0.3));
-  border: 3px solid #a8c6e5;
-  border-radius: 15px;
+  width: 200px;
+  margin-bottom: 2rem;
+  filter: drop-shadow(0 0 15px rgba(59, 130, 246, 0.6));
+  border: 2px solid rgba(59, 130, 246, 0.3);
+  border-radius: 18px;
   box-shadow: 
-    2px 2px 0 #004b70,
-    inset 2px 2px 0 #d4f1ff,
-    0 0 20px rgba(160, 216, 255, 0.4);
-  animation: float 5s ease-in-out infinite, logoGlow 8s ease-in-out infinite;
+    inset 0 0 20px rgba(59, 130, 246, 0.2),
+    0 0 30px rgba(59, 130, 246, 0.3);
+  animation: float 6s ease-in-out infinite;
   transition: transform 0.3s ease;
 }
 
@@ -92,82 +81,88 @@
   transform: scale(1.05) rotate(2deg);
 }
 
-@keyframes logoGlow {
-  0%, 100% { box-shadow: 0 0 20px rgba(160, 216, 255, 0.4); }
-  50% { box-shadow: 0 0 30px rgba(160, 216, 255, 0.6); }
-}
-
 .sketch-title {
   font-size: 3rem;
-  color: #005f8b;
-  margin: 0 0 0.5rem 0;
-  text-shadow: 
-    1px 1px 0 rgba(160, 216, 255, 0.5),
-    0 0 10px rgba(160, 216, 255, 0.3);
-  letter-spacing: 0.04em;
-  border-bottom: 3px dashed #a8c6e5;
-  padding-bottom: 0.75rem;
+  color: transparent;
+  margin: 0 0 1rem 0;
+  background: linear-gradient(90deg, #93c5fd, #60a5fa);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
   position: relative;
+  padding-bottom: 1.5rem;
 }
 
 .sketch-title::after {
   content: "";
   position: absolute;
-  bottom: -6px;
-  left: 25%;
-  right: 25%;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #a8c6e5, transparent);
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 150px;
+  height: 3px;
+  background: linear-gradient(90deg, #3b82f6, transparent);
 }
 
 .sketch-tagline {
-  font-size: 1.25rem;
-  color: #3a6d99;
-  margin-bottom: 2.5rem;
-  font-style: italic;
+  font-size: 1.3rem;
+  color: #a8c6e5;
+  margin-bottom: 3rem;
   line-height: 1.5;
-  text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.1em;
 }
 
-/* Expedition Upload Button */
+/* Data Upload Interface */
 .sketch-upload-btn {
   display: inline-block;
   cursor: pointer;
   font-weight: 700;
   font-size: 1.3rem;
-  color: #1a4b6e;
-  background: linear-gradient(to bottom, #e2eafc, #d3dcf9);
-  padding: 1.2rem 4rem;
-  border-radius: 30px;
-  border: 3px dashed #7a9bc2;
+  color: white;
+  background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+  padding: 1.3rem 4rem;
+  border-radius: 12px;
+  border: none;
   box-shadow: 
-    inset 2px 2px 5px rgba(0, 95, 139, 0.1),
-    3px 3px 0 rgba(0, 95, 139, 0.2);
+    0 8px 25px rgba(30, 58, 138, 0.5),
+    inset 0 1px 1px rgba(255, 255, 255, 0.1);
   transition: all 0.3s ease;
   user-select: none;
   letter-spacing: 0.05em;
   position: relative;
   overflow: hidden;
   text-transform: uppercase;
-  font-family: 'Patrick Hand', cursive; /* Add this line */
+  margin: 0.5rem 0;
+  width: 100%;
+}
+
+.sketch-upload-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: 0.5s;
 }
 
 .sketch-upload-btn:hover,
 .sketch-upload-btn:focus {
-  background: linear-gradient(to bottom, #d3dcf9, #c4d0f5);
+  transform: translateY(-3px);
   box-shadow: 
-    inset 3px 3px 8px rgba(0, 95, 139, 0.15),
-    4px 4px 0 rgba(0, 95, 139, 0.25);
-  outline: 2px dotted #5b6fbb;
-  outline-offset: 4px;
-  transform: translate(-1px, -1px);
+    0 12px 30px rgba(30, 58, 138, 0.6),
+    inset 0 1px 1px rgba(255, 255, 255, 0.1);
+}
+
+.sketch-upload-btn:hover::before {
+  left: 100%;
 }
 
 .sketch-upload-btn:active {
-  transform: translate(1px, 1px);
-  box-shadow: 
-    inset 2px 2px 5px rgba(0, 95, 139, 0.1),
-    1px 1px 0 rgba(0, 95, 139, 0.2);
+  transform: translateY(1px);
 }
 
 .sketch-upload-btn input {
@@ -180,40 +175,51 @@
   cursor: pointer;
 }
 
-/* Research Station Status Display */
+/* System Status Display */
 .sketch-status {
   margin-top: 2.5rem;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: 'Roboto Mono', monospace;
   font-size: 1.1rem;
-  color: #3a6d99;
+  color: #93c5fd;
   min-height: 2em;
   letter-spacing: 0.03em;
   user-select: text;
-  max-width: 400px;
-  margin-left: auto;
-  margin-right: auto;
+  max-width: 100%;
   text-align: center;
   white-space: pre-wrap;
-  padding: 1rem;
-  background: rgba(214, 234, 255, 0.7);
-  border-radius: 10px;
-  border: 3px dashed #7a9bc2;
+  padding: 1.5rem;
+  background: rgba(30, 41, 59, 0.8);
+  border-radius: 12px;
+  border: 1px solid rgba(59, 130, 246, 0.3);
   box-shadow: 
-    inset 0 0 10px rgba(0, 95, 139, 0.1),
-    0 0 10px rgba(0, 95, 139, 0.1);
+    inset 0 0 15px rgba(0, 0, 0, 0.2),
+    0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
-@keyframes slight-shake {
-  0%, 100% { transform: translate(0, 0) rotate(0); }
-  25% { transform: translate(1px, 1px) rotate(0.5deg); }
-  50% { transform: translate(-1px, 0.5px) rotate(-0.5deg); }
-  75% { transform: translate(0.5px, -1px) rotate(0.3deg); }
+/* Buttons Container */
+.sketch-buttons-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  margin: 1.5rem 0;
+}
+
+/* View Gallery Button */
+button.sketch-upload-btn {
+  background: linear-gradient(135deg, #1e3a8a 0%, #172554 100%);
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {
   .sketch-doorframe {
-    padding: 2.5rem 2rem;
+    padding: 3rem 2rem;
   }
 
   .sketch-title {
@@ -226,14 +232,14 @@
   }
 
   .sketch-upload-btn {
-    padding: 1rem 3rem;
+    padding: 1.1rem 3rem;
     font-size: 1.1rem;
   }
 }
 
 @media (max-width: 480px) {
   .sketch-doorframe {
-    padding: 2rem 1.5rem;
+    padding: 2.5rem 1.5rem;
   }
   
   .sketch-title {
@@ -241,84 +247,92 @@
   }
   
   .sketch-upload-btn {
-    padding: 0.9rem 2.5rem;
+    padding: 1rem 2.5rem;
+  }
+  
+  .sketch-buttons-container {
+    gap: 0.8rem;
   }
 }
 
 /* Buttons Container */
 .sketch-buttons-container {
   display: flex;
-  justify-content: center; /* This centers the buttons horizontally */
-  gap: 1rem; /* This adds consistent spacing between buttons */
+  flex-direction: column;
+  gap: 1rem;
   width: 100%;
-  margin: 1rem 0;
+  margin: 1.5rem 0;
+  align-items: center;
 }
 
-
-/* View Gallery Button - matches upload button style */
+/* Base button styles - applied to both buttons */
+.sketch-upload-btn,
 button.sketch-upload-btn {
   display: inline-block;
   cursor: pointer;
   font-weight: 700;
   font-size: 1.3rem;
-  color: #1a4b6e;
-  background: linear-gradient(to bottom, #e2eafc, #d3dcf9);
-  padding: 1.2rem 4rem;
-  border-radius: 30px;
-  border: 3px dashed #7a9bc2;
+  color: white;
+  padding: 1.3rem 2rem; /* Adjusted padding for more consistent width */
+  border-radius: 12px;
+  border: none;
   box-shadow: 
-    inset 2px 2px 5px rgba(0, 95, 139, 0.1),
-    3px 3px 0 rgba(0, 95, 139, 0.2);
+    0 8px 25px rgba(30, 58, 138, 0.5),
+    inset 0 1px 1px rgba(255, 255, 255, 0.1);
   transition: all 0.3s ease;
   user-select: none;
   letter-spacing: 0.05em;
   position: relative;
   overflow: hidden;
   text-transform: uppercase;
+  margin: 0;
   width: 100%;
   box-sizing: border-box;
+  text-align: center;
+  text-decoration: none;
+  align-items: center;
 }
 
+/* Specific styles for upload button */
+.sketch-upload-btn {
+  background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+}
+
+/* Specific styles for gallery button */
+button.sketch-upload-btn {
+  background: linear-gradient(135deg, #1e3a8a 0%, #172554 100%);
+}
+
+/* Hover effects for both buttons */
+.sketch-upload-btn::before,
+button.sketch-upload-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: 0.5s;
+  align-items: center;
+}
+
+.sketch-upload-btn:hover,
+.sketch-upload-btn:focus,
 button.sketch-upload-btn:hover,
 button.sketch-upload-btn:focus {
-  background: linear-gradient(to bottom, #d3dcf9, #c4d0f5);
+  transform: translateY(-3px);
   box-shadow: 
-    inset 3px 3px 8px rgba(0, 95, 139, 0.15),
-    4px 4px 0 rgba(0, 95, 139, 0.25);
-  outline: 2px dotted #5b6fbb;
-  outline-offset: 4px;
-  transform: translate(-1px, -1px);
+    0 12px 30px rgba(30, 58, 138, 0.6),
+    inset 0 1px 1px rgba(255, 255, 255, 0.1);
 }
 
+.sketch-upload-btn:hover::before,
+button.sketch-upload-btn:hover::before {
+  left: 100%;
+}
+
+.sketch-upload-btn:active,
 button.sketch-upload-btn:active {
-  transform: translate(1px, 1px);
-  box-shadow: 
-    inset 2px 2px 5px rgba(0, 95, 139, 0.1),
-    1px 1px 0 rgba(0, 95, 139, 0.2);
-}
-
-/* Make the label button full width */
-label.sketch-upload-btn {
-  width: 100%;
-  box-sizing: border-box;
-}
-
-/* Responsive adjustments for buttons */
-@media (max-width: 768px) {
-  button.sketch-upload-btn,
-  label.sketch-upload-btn {
-    padding: 1rem 3rem;
-    font-size: 1.1rem;
-  }
-}
-
-@media (max-width: 480px) {
-  button.sketch-upload-btn,
-  label.sketch-upload-btn {
-    padding: 0.9rem 2.5rem;
-  }
-}
-
-button.sketch-upload-btn {
-  font-family: inherit; /* This will inherit from .sketch-upload-btn */
+  transform: translateY(1px);
 }
