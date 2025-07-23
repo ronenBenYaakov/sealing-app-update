@@ -26,15 +26,15 @@ function OurModels() {
       logoClass: "vision-seal-logo",
       route: "/seal-photo-cloud-home",
     },
-    {
-      title: "Auto Adapt",
-      description:
-        "Our innovative continual learning platform enhances your existing Hugging Face models by leveraging a collective expertise system inspired by Decksmiths, improving performance continuously without increasing model size or storage requirements.",
-      hasButton: true,
-      logo: "DeckSmithSealLogo-removebg.png",
-      logoClass: "decksmith-logo",
-      route: "/decksmith",
-    },
+    //{
+    //  title: "Auto Adapt",
+      //description:
+      //  "Our innovative continual learning platform enhances your existing Hugging Face models by leveraging a collective expertise system inspired by Decksmiths, improving performance continuously without increasing model size or storage requirements.",
+      //hasButton: true,
+      //logo: "DeckSmithSealLogo-removebg.png",
+      //logoClass: "decksmith-logo",
+      //route: "/decksmith",
+    //},
   ];
 
   return (
@@ -64,7 +64,7 @@ function OurModels() {
                 className="go-to-decksmith"
                 onClick={() => navigate(proj.route)}
               >
-                Learn More
+                Go!
               </button>
             )}
           </div>
