@@ -14,6 +14,7 @@ import SignUp from './Signup'
 import Login from './Login'
 import SealPhotoCloudHome from './SealPhotoCloudHome'
 import Gallery from './Gallery'
+import AgentGo from './AgentGo'
 import "./App.css";
 
 // Fade-in animation wrapper
@@ -138,6 +139,7 @@ function App() {
         <Route path="/get-token" element={<GetToken />} />
         <Route path='/seal-photo-cloud-home' element={<SealPhotoCloudHome />} />
         <Route path="/gallery" element={<Gallery />} />
+        <Route path='/agent-go' element={<AgentGo />} />
       </Routes>
     </Router>
   );

@@ -6,6 +6,17 @@ function OurModels() {
   const navigate = useNavigate();
 
   const projects = [
+
+    {
+      title: "Agent Go",
+      description:
+        "Advanced autonomous agent framework that enables intelligent decision-making and task automation in dynamic environments.",
+      hasButton: true,
+      logo: "agentGoMascot.png", // Make sure to add this image to your public folder
+      logoClass: "agent-go-logo",
+      route: "/agent-go", // You'll need to set up this route in your router
+    },
+
     {
       title: "Photo Archive",
       description:
@@ -13,7 +24,7 @@ function OurModels() {
       hasButton: true,
       logo: "photoSeal.png",
       logoClass: "vision-seal-logo",
-      route: "/seal-photo-cloud-home",  // 👈 NEW
+      route: "/seal-photo-cloud-home",
     },
     {
       title: "Auto Adapt",
@@ -22,7 +33,7 @@ function OurModels() {
       hasButton: true,
       logo: "DeckSmithSealLogo-removebg.png",
       logoClass: "decksmith-logo",
-      route: "/decksmith",  // 👈 NEW
+      route: "/decksmith",
     },
   ];
 
@@ -51,7 +62,7 @@ function OurModels() {
             {proj.hasButton && (
               <button
                 className="go-to-decksmith"
-                onClick={() => navigate(proj.route)}  // 👈 USE DYNAMIC ROUTE
+                onClick={() => navigate(proj.route)}
               >
                 Learn More
               </button>
