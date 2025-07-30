@@ -3,7 +3,7 @@ import './App.css'; // Make sure this CSS file is in the same directory
 
 function App() {
   const [messages, setMessages] = useState([
-    { text: "Hello! I'm your SEAL assistant. How can I help you today?", sender: 'bot' }
+    { text: "Hello! I'm your AgentGO assistant. How can I help you today?", sender: 'bot' }
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -11,6 +11,7 @@ function App() {
   const [searchQuery, setSearchQuery] = useState(''); // State for search bar input
   const [searchResults, setSearchResults] = useState([]); // State for dummy search results
   const [showSearchResults, setShowSearchResults] = useState(false); // State to control visibility of search results
+  const [showLoadingScreen, setShowLoadingScreen] = useState(true); // State for the loading screen
   const chatContainerRef = useRef(null);
   const prevScrollTop = useRef(0);
   const prevScrollHeight = useRef(0);
@@ -18,9 +19,16 @@ function App() {
 
   // Dummy data for categories
   const dummyCategories = [
-    "Classic 🙂",
-    "Cars 🏎️",
-    "Cooking 🧑‍🍳"
+    "Technical Support",
+    "Billing Inquiries",
+    "Product Features",
+    "Account Management",
+    "Troubleshooting Guides",
+    "General Information",
+    "Security Concerns",
+    "Privacy Policy",
+    "API Documentation",
+    "Integrations"
   ];
 
   // Function to send message to API
@@ -141,8 +149,28 @@ function App() {
     };
   }, [searchInputRef]);
 
+  // Effect for the loading screen animation
+  useEffect(() => {
+    if (showLoadingScreen) {
+      // Total animation duration: typing (2s) + fade out (1s) + small buffer (0.5s)
+      const totalAnimationDuration = 2000 + 1000 + 500; // 3.5 seconds
+      const timer = setTimeout(() => {
+        setShowLoadingScreen(false);
+      }, totalAnimationDuration);
+      return () => clearTimeout(timer);
+    }
+  }, [showLoadingScreen]);
+
+
   return (
     <div className="agent-go-container">
+      {/* Loading Screen */}
+      {showLoadingScreen && (
+        <div className="loading-screen">
+          <h1 className="loading-text">Welcome to Sealing</h1>
+        </div>
+      )}
+
       {/* Sidebar Overlay */}
       {isMenuOpen && <div className="sidebar-overlay" onClick={closeSidebar}></div>}
 
@@ -179,8 +207,8 @@ function App() {
 
           <div className="assistant-info">
             <div className="assistant-details">
-              <h1>SEAL Assistant</h1>
-              <p>Enterprise AI Support</p>
+              <h1>AgentGO</h1> {/* Changed from SEAL Assistant */}
+              {/* Removed the tagline below */}
             </div>
           </div>
           {/* Removed status indicator as per previous request */}
@@ -193,7 +221,7 @@ function App() {
             placeholder="Search categories..."
             value={searchQuery}
             onChange={handleSearchChange}
-            onFocus={handleSearchFocus}
+            onFocus={handleSearchFocus} 
             aria-label="Search categories"
           />
           {/* Search Icon (using SVG for simplicity, can be a Font Awesome icon) */}

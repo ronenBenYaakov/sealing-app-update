@@ -11,8 +11,11 @@ html, body, #root { /* Ensure html and #root also take full height */
 
 body {
     font-family: 'Inter', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    /* Enhancements for sharper font rendering */
+    -webkit-font-smoothing: antialiased; /* For Chrome/Safari */
+    -moz-osx-font-smoothing: grayscale; /* For Firefox on macOS, can make fonts slightly bolder */
+    text-rendering: optimizeLegibility; /* Prioritize legibility */
+    
     background-color: #f8f8f8; /* Very light gray background for the page */
     display: flex;
     justify-content: center;
@@ -35,6 +38,56 @@ body {
     overflow: hidden;
     transition: all 0.3s ease;
 }
+
+/* Loading Screen */
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff; /* White background for the loading screen */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999; /* Ensure it's on top of everything */
+    opacity: 1;
+    visibility: visible;
+    animation: fadeOut 1s forwards 2.5s; /* Fade out after typing (2s) + a small delay (0.5s) */
+}
+
+.loading-text {
+    font-size: 2.5rem; /* Larger font size for impact */
+    font-weight: 700;
+    color: #333333;
+    overflow: hidden; /* Hide text until typed */
+    white-space: nowrap; /* Keep text on one line */
+    border-right: .15em solid black; /* Blinking caret */
+    width: 0; /* Start with no width */
+    animation: 
+        typing-welcome 2s steps(18, end) forwards, /* Type "Welcome to Sealing" (18 chars) */
+        blink-caret-welcome .75s step-end infinite; /* Blinking cursor */
+    animation-delay: 0s, 2s; /* Start typing immediately, start blinking after typing */
+}
+
+/* Keyframes for "Welcome to Sealing" typing effect */
+@keyframes typing-welcome {
+    from { width: 0 }
+    to { width: 18ch } /* 18 characters for "Welcome to Sealing" */
+}
+
+/* Keyframes for blinking caret on loading screen */
+@keyframes blink-caret-welcome {
+    from, to { border-color: transparent }
+    50% { border-color: black }
+}
+
+/* Keyframes for loading screen fade out */
+@keyframes fadeOut {
+    from { opacity: 1; visibility: visible; }
+    to { opacity: 0; visibility: hidden; }
+}
+
 
 /* Sidebar Overlay */
 .sidebar-overlay {
@@ -172,7 +225,30 @@ body {
     margin: 0;
     letter-spacing: -0.5px;
     color: #333333; /* Ensure dark color for heading */
+    
+    /* AgentGO Typing Effect Styles - Ensure these are not overridden by loading screen */
+    /* They will be visible once the loading screen fades out */
+    overflow: hidden;
+    white-space: nowrap;
+    width: 7ch; 
+    animation: 
+        typing 1.5s steps(7, end) forwards, 
+        blink-caret .75s step-end infinite; 
+    border-right: .15em solid black; 
 }
+
+/* Keyframes for AgentGO typing effect */
+@keyframes typing {
+    from { width: 0 }
+    to { width: 7ch } /* 7 characters for "AgentGO" */
+}
+
+/* Keyframes for blinking caret on AgentGO title */
+@keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: black }
+}
+
 
 .assistant-details p {
     font-size: 0.95rem;
