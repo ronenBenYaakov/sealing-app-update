@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { ChevronDown, ChevronUp } from 'lucide-react';
 import './App.css';
 
 function App() {
@@ -7,34 +6,11 @@ function App() {
     { text: "Hello! I'm your SEAL assistant. How can I help you today?", sender: 'bot' }
   ]);
   const [inputValue, setInputValue] = useState('');
-  const [searchFocused, setSearchFocused] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [showAbout, setShowAbout] = useState(false);
-  const [aboutHeight, setAboutHeight] = useState(0);
-
   const chatContainerRef = useRef(null);
-  const aboutRef = useRef(null);
   const prevScrollTop = useRef(0);
   const prevScrollHeight = useRef(0);
 
-  const topSuggestions = [
-    { emoji: '🚗', label: 'Cars' },
-    { emoji: '🧬', label: 'Biology' },
-    { emoji: '🍳', label: 'Cooking' }
-  ];
-
-  const toggleAbout = () => {
-    setShowAbout(!showAbout);
-  };
-
-  // Update about section height when it's shown
-  useEffect(() => {
-    if (aboutRef.current) {
-      setAboutHeight(showAbout ? aboutRef.current.scrollHeight : 0);
-    }
-  }, [showAbout]);
-
-  // Function to send message to API
   const sendMessageToAPI = async (message) => {
     setIsLoading(true);
     try {
@@ -54,7 +30,6 @@ function App() {
     }
   };
 
-  // Handle sending a user message
   const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!inputValue.trim() || isLoading) return;
@@ -73,7 +48,6 @@ function App() {
     setMessages(prev => [...prev, { text: aiResponse, sender: 'bot' }]);
   };
 
-  // Scroll chat container smartly on new messages
   useEffect(() => {
     const container = chatContainerRef.current;
     if (!container) return;
@@ -91,72 +65,50 @@ function App() {
 
   return (
     <div className="agent-go-container">
-      {/* Header Section - Now more compact */}
-      <div className="agent-go-header">
-        <div className="agent-go-title-container">
-          <div className="agent-go-main-logo">
-            <img
-              src={`${process.env.PUBLIC_URL}/AgentGoMascot.png`}
-              alt="Agent Go Mascot"
-              className="mascot-img"
-            />
-          </div>
-          <div className="agent-go-title">
-            <h2>Agent Go</h2>
-            <p>Your intelligent assistant</p>
-          </div>
-        </div>
-
-        <div className="header-container">
-          <div className="header-search-bar">
-            <input
-              type="text"
-              className="header-message-bar"
-              placeholder="Search..."
-              onFocus={() => setSearchFocused(true)}
-              onBlur={() => setTimeout(() => setSearchFocused(false), 100)}
-            />
-            <button className="search-button" aria-label="Search">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="16"
-                width="16"
-                viewBox="0 0 24 24"
-                fill="white"
-              >
-                <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 
-                6.5 6.5 0 109.5 16c1.61 0 3.09-.59 
-                4.23-1.57l.27.28v.79l5 4.99L20.49 
-                19l-4.99-5zm-6 0C8.01 14 6 11.99 6 
-                9.5S8.01 5 10.5 5 15 7.01 15 
-                9.5 12.99 14 10.5 14z"/>
+      <div className="chat-header">
+        <div className="header-content">
+          <div className="assistant-info">
+            <div className="assistant-avatar">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 7V10C2 16 6 20.5 12 22C18 20.5 22 16 22 10V7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
-            </button>
-
-            {searchFocused && (
-              <div className="search-suggestions">
-                {topSuggestions.map(({ emoji, label }, idx) => (
-                  <div className="suggestion-item" key={idx}>
-                    <span>{emoji}</span> <span>{label}</span>
-                  </div>
-                ))}
-              </div>
-            )}
+            </div>
+            <div className="assistant-details">
+              <h1>SEAL Assistant</h1>
+              <p>AI-powered support</p>
+            </div>
           </div>
+          <div className="status-indicator online"></div>
         </div>
       </div>
 
-      {/* Chat Container */}
       <div className="chat-container">
         <div className="chat-messages" ref={chatContainerRef}>
           {messages.map(({ text, sender }, index) => (
             <div key={index} className={`message ${sender}`}>
+              <div className="message-avatar">
+                {sender === 'bot' ? (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7V10C2 16 6 20.5 12 22C18 20.5 22 16 22 10V7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                ) : (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 21V19C20 16.7909 18.2091 15 16 15H8C5.79086 15 4 16.7909 4 19V21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <circle cx="12" cy="7" r="4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                )}
+              </div>
               <div className="message-content">{text}</div>
             </div>
           ))}
 
           {isLoading && (
             <div className="message bot">
+              <div className="message-avatar">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2L2 7V10C2 16 6 20.5 12 22C18 20.5 22 16 22 10V7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
               <div className="message-content">
                 <div className="typing-indicator">
                   <span></span>
@@ -168,7 +120,6 @@ function App() {
           )}
         </div>
 
-        {/* Bottom Input Bar */}
         <form onSubmit={handleSendMessage} className="chat-input">
           <input
             type="text"
@@ -197,59 +148,6 @@ function App() {
             </svg>
           </button>
         </form>
-
-        <div className="bottom-bar-info">
-          <div className="arrow-down" onClick={toggleAbout}>
-            <ChevronUp 
-              size={54} 
-              color="#2563eb" 
-              className={showAbout ? "rotate-180" : ""}
-              style={{ transition: "transform 0.3s ease", display: showAbout ? "none" : "block" }}
-            />
-          </div>
-          <p className="about-text">About SealChat</p>
-        </div>
-      </div>
-
-      <div 
-        ref={aboutRef}
-        className="about-section"
-        style={{
-          height: `${aboutHeight}px`,
-          overflow: 'hidden',
-          transition: 'height 0.5s ease',
-          position: 'relative'
-        }}
-      >
-        <div className="about-content">
-          <h2>About SealChat</h2>
-          <p>
-            SealChat is an intelligent conversational assistant designed to help you with 
-            various tasks and answer your questions. Powered by advanced AI technology, 
-            it can assist with topics ranging from general knowledge to specific domains.
-          </p>
-          <p>
-            Our mission is to provide a seamless and intuitive chat experience that 
-            feels natural and helpful. Whether you need quick information or in-depth 
-            discussions, SealChat is here to assist.
-          </p>
-          <h3>Features</h3>
-          <ul>
-            <li>Natural language understanding</li>
-            <li>Wide range of knowledge</li>
-            <li>Personalized responses</li>
-            <li>Continuous learning</li>
-          </ul>
-          
-          {/* Up Arrow in About Section */}
-          <div className="arrow-up-container" onClick={toggleAbout}>
-            <ChevronDown
-              size={54} 
-              color="#2563eb" 
-              style={{ transition: "transform 0.3s ease", display: showAbout ? "block" : "none" }}
-            />
-          </div>
-        </div>
       </div>
     </div>
   );
