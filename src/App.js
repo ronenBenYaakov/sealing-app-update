@@ -12,6 +12,7 @@ function App() {
   const [searchResults, setSearchResults] = useState([]); // State for dummy search results
   const [showSearchResults, setShowSearchResults] = useState(false); // State to control visibility of search results
   const [showLoadingScreen, setShowLoadingScreen] = useState(true); // State for the loading screen
+  const [selectedCategory, setSelectedCategory] = useState(null); // New state to store the selected category for API calls
   const chatContainerRef = useRef(null);
   const prevScrollTop = useRef(0);
   const prevScrollHeight = useRef(0);
@@ -19,24 +20,29 @@ function App() {
 
   // Dummy data for categories
   const dummyCategories = [
-    "Technical Support",
-    "Billing Inquiries",
-    "Product Features",
-    "Account Management",
-    "Troubleshooting Guides",
-    "General Information",
-    "Security Concerns",
-    "Privacy Policy",
-    "API Documentation",
-    "Integrations"
+    "Classic 😊", // Added smiling emoji
+    "Trivia 🤓"   // Added smart guy emoji
   ];
+
+  // Helper function to strip emojis from a string
+  const stripEmojis = (str) => {
+    // Regex to match common emoji ranges
+    return str.replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '').trim();
+  };
 
   // Function to send message to API
   const sendMessageToAPI = async (message) => {
     setIsLoading(true);
+    let apiUrl = 'https://yearly-notable-newt.ngrok-free.app/agent-go/chat';
+
+    // If a category is selected, append it to the URL
+    if (selectedCategory) {
+      // Ensure the selectedCategory is already cleaned and lowercased for the URL path
+      apiUrl = `https://yearly-notable-newt.ngrok-free.app/agent-go/chat/${selectedCategory.toLowerCase().replace(/\s/g, '-')}`;
+    }
+
     try {
-      // Replace with your actual API endpoint
-      const response = await fetch('https://yearly-notable-newt.ngrok-free.app/agent-go/chat', {
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: 'current_user', message })
@@ -106,33 +112,34 @@ function App() {
     setSearchQuery(query);
 
     if (query.trim() === '') {
-      // If query is empty, show all dummy categories
       setSearchResults(dummyCategories);
     } else {
-      // Filter dummy categories based on search query
       const filteredResults = dummyCategories.filter(category =>
         category.toLowerCase().includes(query.toLowerCase())
       );
       setSearchResults(filteredResults);
     }
-    setShowSearchResults(true); // Always show results when typing or input is focused
+    setShowSearchResults(true);
   };
 
   // Handler for when the search input gains focus
   const handleSearchFocus = () => {
     if (searchQuery.trim() === '') {
-      setSearchResults(dummyCategories); // Show all categories if input is empty
+      setSearchResults(dummyCategories);
     }
     setShowSearchResults(true);
   };
 
   // Handler for selecting a search result
   const handleSelectSearchResult = (result) => {
-    setSearchQuery(result); // Set the input value to the selected result
+    // Extract the first word from the result string
+    const firstWord = result.split(' ')[0];
+    const cleanedResult = stripEmojis(firstWord); // Strip emojis from only the first word
+    setSearchQuery(result); // Keep emoji in the input display for selected item
+    setSelectedCategory(cleanedResult); // Set the selected category for API
     setSearchResults([]); // Clear results
     setShowSearchResults(false); // Hide results
-    // You can add further logic here, e.g., trigger a chat message or navigate
-    console.log("Selected category:", result);
+    console.log("Selected category for API (first word, no emoji):", cleanedResult);
   };
 
   // Effect to handle clicks outside the search results dropdown
@@ -152,7 +159,6 @@ function App() {
   // Effect for the loading screen animation
   useEffect(() => {
     if (showLoadingScreen) {
-      // Total animation duration: typing (2s) + fade out (1s) + small buffer (0.5s)
       const totalAnimationDuration = 2000 + 1000 + 500; // 3.5 seconds
       const timer = setTimeout(() => {
         setShowLoadingScreen(false);
@@ -207,24 +213,21 @@ function App() {
 
           <div className="assistant-info">
             <div className="assistant-details">
-              <h1>AgentGO</h1> {/* Changed from SEAL Assistant */}
-              {/* Removed the tagline below */}
+              <h1>AgentGO</h1>
             </div>
           </div>
-          {/* Removed status indicator as per previous request */}
         </div>
 
         {/* Search Bar */}
-        <div className="search-bar" ref={searchInputRef}> {/* Attach ref here */}
+        <div className="search-bar" ref={searchInputRef}>
           <input
             type="text"
             placeholder="Search categories..."
             value={searchQuery}
             onChange={handleSearchChange}
-            onFocus={handleSearchFocus} 
+            onFocus={handleSearchFocus}
             aria-label="Search categories"
           />
-          {/* Search Icon (using SVG for simplicity, can be a Font Awesome icon) */}
           <svg className="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19ZM21 21L16.65 16.65" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
