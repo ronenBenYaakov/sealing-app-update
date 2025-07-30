@@ -1,3 +1,4 @@
+
 /* General Styling */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
@@ -22,6 +23,8 @@ body {
     align-items: center;
     min-height: 100vh;
     box-sizing: border-box;
+    /* Prevent unwanted scrolling on mobile when reaching end of content */
+    overscroll-behavior-y: contain; 
 }
 
 /* Main Container */
@@ -386,6 +389,8 @@ body {
 .chat-messages {
     flex: 1;
     padding: 20px 24px;
+    /* Add extra padding at the bottom for mobile safe area */
+    padding-bottom: calc(20px + env(safe-area-inset-bottom));
     overflow-y: auto;
     display: flex;
     flex-direction: column;
@@ -473,6 +478,8 @@ body {
     border-top: 1px solid #e8e8e8;
     gap: 12px;
     box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.03);
+    /* Add extra padding at the bottom for mobile safe area */
+    padding-bottom: calc(18px + env(safe-area-inset-bottom));
 }
 
 .chat-input input {
@@ -565,6 +572,8 @@ body {
     .chat-messages {
         padding: 16px 20px;
         gap: 12px;
+        /* Ensure mobile-specific padding-bottom is applied */
+        padding-bottom: calc(16px + env(safe-area-inset-bottom));
     }
 
     .message-content {
@@ -575,6 +584,8 @@ body {
     .chat-input {
         padding: 14px 20px;
         gap: 10px;
+        /* Ensure mobile-specific padding-bottom is applied */
+        padding-bottom: calc(14px + env(safe-area-inset-bottom));
     }
 
     .chat-input input {
