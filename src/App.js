@@ -21,7 +21,8 @@ function App() {
   // Dummy data for categories
   const dummyCategories = [
     "Classic 😊", // Added smiling emoji
-    "Trivia 🤓"   // Added smart guy emoji
+    "Trivia 🤓",   // Added smart guy emoji
+    "Chef 👨‍🍳"    // Added Chef category with emoji
   ];
 
   // Helper function to strip emojis from a string
@@ -156,9 +157,10 @@ function App() {
     };
   }, [searchInputRef]);
 
-  // Effect for the loading screen animation
+  // Effect for the loading screen animation (sound removed)
   useEffect(() => {
     if (showLoadingScreen) {
+      // Total animation duration: typing (2s) + fade out (1s) + small buffer (0.5s)
       const totalAnimationDuration = 2000 + 1000 + 500; // 3.5 seconds
       const timer = setTimeout(() => {
         setShowLoadingScreen(false);
