@@ -68,14 +68,9 @@ function App() {
       <div className="chat-header">
         <div className="header-content">
           <div className="assistant-info">
-            <div className="assistant-avatar">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2L2 7V10C2 16 6 20.5 12 22C18 20.5 22 16 22 10V7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </div>
             <div className="assistant-details">
               <h1>SEAL Assistant</h1>
-              <p>AI-powered support</p>
+              <p>Enterprise AI Support</p>
             </div>
           </div>
           <div className="status-indicator online"></div>
@@ -86,29 +81,12 @@ function App() {
         <div className="chat-messages" ref={chatContainerRef}>
           {messages.map(({ text, sender }, index) => (
             <div key={index} className={`message ${sender}`}>
-              <div className="message-avatar">
-                {sender === 'bot' ? (
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2L2 7V10C2 16 6 20.5 12 22C18 20.5 22 16 22 10V7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                ) : (
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M20 21V19C20 16.7909 18.2091 15 16 15H8C5.79086 15 4 16.7909 4 19V21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <circle cx="12" cy="7" r="4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                )}
-              </div>
               <div className="message-content">{text}</div>
             </div>
           ))}
 
           {isLoading && (
             <div className="message bot">
-              <div className="message-avatar">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 2L2 7V10C2 16 6 20.5 12 22C18 20.5 22 16 22 10V7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </div>
               <div className="message-content">
                 <div className="typing-indicator">
                   <span></span>
@@ -130,13 +108,8 @@ function App() {
             aria-label="Message input"
           />
           <button type="submit" disabled={isLoading} aria-label="Send message">
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                 xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M7 11L12 6L17 11M12 18V7"
                 stroke="currentColor"
