@@ -13,7 +13,7 @@ body {
     font-family: 'Inter', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: #f8f9fa; /* Very light gray background for the page */
+    background-color: #f8f8f8; /* Very light gray background for the page */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -35,6 +35,106 @@ body {
     overflow: hidden;
     transition: all 0.3s ease;
 }
+
+/* Sidebar Overlay */
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    z-index: 100; /* Above chat content, below sidebar */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.sidebar-overlay.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px; /* Width of the sidebar */
+    height: 100%;
+    background-color: #ffffff;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 101; /* Above overlay */
+    transform: translateX(-100%); /* Start off-screen */
+    transition: transform 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.sidebar.open {
+    transform: translateX(0); /* Slide in */
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eeeeee;
+    margin-bottom: 20px;
+}
+
+.sidebar-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #333333;
+}
+
+.close-sidebar-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    color: #666666;
+    transition: color 0.2s ease;
+}
+
+.close-sidebar-button:hover {
+    color: #000000; /* Black on hover */
+}
+
+.close-sidebar-button svg {
+    width: 24px;
+    height: 24px;
+}
+
+.sidebar-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-nav li {
+    margin-bottom: 10px;
+}
+
+.sidebar-nav a {
+    display: block;
+    padding: 12px 15px;
+    text-decoration: none;
+    color: #333333;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.sidebar-nav a:hover {
+    background-color: #f0f0f0; /* Light gray hover */
+    color: #000000; /* Black text on hover */
+}
+
 
 /* Chat Header */
 .chat-header {
@@ -143,7 +243,7 @@ body {
     padding: 10px 15px 10px 40px;
     border: 1px solid #e0e0e0; /* Light border for search input */
     border-radius: 25px;
-    background-color: #f8f9fa; /* Very light background for search input */
+    background-color: #f8f8f8; /* Very light background for search input */
     color: #333333; /* Dark text for search input */
     font-size: 1rem;
     outline: none;
@@ -156,8 +256,8 @@ body {
 
 .search-bar input:focus {
     background-color: #ffffff;
-    border-color: #007bff; /* Blue accent on focus */
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15); /* Softer blue glow on focus */
+    border-color: #333333; /* Black accent on focus */
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1); /* Softer black glow on focus */
 }
 
 .search-bar .search-icon {
@@ -165,6 +265,36 @@ body {
     left: 15px;
     color: #666666; /* Darker icon color */
     pointer-events: none;
+}
+
+/* Search Results Dropdown Styling */
+.search-results-dropdown {
+    position: absolute;
+    top: calc(100% + 5px); /* Position below the input with a small gap */
+    left: 0;
+    right: 0;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    list-style: none;
+    padding: 8px 0;
+    margin: 0;
+    max-height: 200px; /* Limit height and make scrollable */
+    overflow-y: auto;
+    z-index: 50; /* Ensure it's above chat messages but below header */
+}
+
+.search-results-dropdown li {
+    padding: 10px 15px;
+    cursor: pointer;
+    color: #333333;
+    font-size: 0.95rem;
+    transition: background-color 0.2s ease;
+}
+
+.search-results-dropdown li:hover {
+    background-color: #f0f0f0; /* Light gray hover for results */
 }
 
 
@@ -221,8 +351,8 @@ body {
 }
 
 .message.user .message-content {
-    background-color: #e6f3ff; /* Keep light blue as an accent */
-    color: #004085; /* Darker blue text */
+    background-color: #e8e8e8; /* Light gray for user messages */
+    color: #333333; /* Dark text */
     border-bottom-right-radius: 6px;
 }
 
@@ -248,14 +378,6 @@ body {
     border-radius: 50%;
     opacity: 0.8;
     animation: bounce 1.4s infinite ease-in-out;
-}
-
-.typing-indicator span:nth-child(2) {
-    animation-delay: 0.2s;
-}
-
-.typing-indicator span:nth-child(3) {
-    animation-delay: 0.4s;
 }
 
 @keyframes bounce {
@@ -288,8 +410,8 @@ body {
 }
 
 .chat-input input:focus {
-    border-color: #007bff; /* Blue accent on focus */
-    box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.15); /* Softer blue glow on focus */
+    border-color: #333333; /* Black accent on focus */
+    box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.1); /* Softer black glow on focus */
 }
 
 .chat-input input::placeholder {
@@ -297,7 +419,7 @@ body {
 }
 
 .chat-input button {
-    background-color: #007bff; /* Keep blue as a primary accent */
+    background-color: #333333; /* Black background for send button */
     color: #ffffff;
     border: none;
     border-radius: 50%;
@@ -308,18 +430,18 @@ body {
     align-items: center;
     cursor: pointer;
     transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: 0 5px 15px rgba(0, 123, 255, 0.25); /* Softer blue shadow */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25); /* Darker shadow for black button */
 }
 
 .chat-input button:hover {
-    background-color: #0056b3;
+    background-color: #000000; /* Pure black on hover */
     transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0, 123, 255, 0.35);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
 }
 
 .chat-input button:active {
     transform: translateY(0);
-    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .chat-input button:disabled {

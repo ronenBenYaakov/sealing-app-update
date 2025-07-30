@@ -9,9 +9,19 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false); // State for hamburger menu
   const [searchQuery, setSearchQuery] = useState(''); // State for search bar input
+  const [searchResults, setSearchResults] = useState([]); // State for dummy search results
+  const [showSearchResults, setShowSearchResults] = useState(false); // State to control visibility of search results
   const chatContainerRef = useRef(null);
   const prevScrollTop = useRef(0);
   const prevScrollHeight = useRef(0);
+  const searchInputRef = useRef(null); // Ref for the search input to handle outside clicks
+
+  // Dummy data for categories
+  const dummyCategories = [
+    "Classic 🙂",
+    "Cars 🏎️",
+    "Cooking 🧑‍🍳"
+  ];
 
   // Function to send message to API
   const sendMessageToAPI = async (message) => {
@@ -75,19 +85,85 @@ function App() {
   // Handler for toggling the hamburger menu
   const handleHamburgerClick = () => {
     setIsMenuOpen(prev => !prev);
-    // You can add logic here to show/hide a sidebar or overlay menu
-    console.log("Hamburger menu toggled:", !isMenuOpen);
+  };
+
+  // Handler for closing the sidebar (e.g., by clicking overlay)
+  const closeSidebar = () => {
+    setIsMenuOpen(false);
   };
 
   // Handler for search input change
   const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
-    // Implement search logic here, e.g., filter messages based on searchQuery
-    console.log("Search query:", e.target.value);
+    const query = e.target.value;
+    setSearchQuery(query);
+
+    if (query.trim() === '') {
+      // If query is empty, show all dummy categories
+      setSearchResults(dummyCategories);
+    } else {
+      // Filter dummy categories based on search query
+      const filteredResults = dummyCategories.filter(category =>
+        category.toLowerCase().includes(query.toLowerCase())
+      );
+      setSearchResults(filteredResults);
+    }
+    setShowSearchResults(true); // Always show results when typing or input is focused
   };
+
+  // Handler for when the search input gains focus
+  const handleSearchFocus = () => {
+    if (searchQuery.trim() === '') {
+      setSearchResults(dummyCategories); // Show all categories if input is empty
+    }
+    setShowSearchResults(true);
+  };
+
+  // Handler for selecting a search result
+  const handleSelectSearchResult = (result) => {
+    setSearchQuery(result); // Set the input value to the selected result
+    setSearchResults([]); // Clear results
+    setShowSearchResults(false); // Hide results
+    // You can add further logic here, e.g., trigger a chat message or navigate
+    console.log("Selected category:", result);
+  };
+
+  // Effect to handle clicks outside the search results dropdown
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchInputRef.current && !searchInputRef.current.contains(event.target)) {
+        setShowSearchResults(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [searchInputRef]);
 
   return (
     <div className="agent-go-container">
+      {/* Sidebar Overlay */}
+      {isMenuOpen && <div className="sidebar-overlay" onClick={closeSidebar}></div>}
+
+      {/* Sidebar */}
+      <div className={`sidebar ${isMenuOpen ? 'open' : ''}`}>
+        <div className="sidebar-header">
+          <h2>Menu</h2>
+          <button className="close-sidebar-button" onClick={closeSidebar} aria-label="Close menu">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+        </div>
+        <ul className="sidebar-nav">
+          <li><a href="#home" onClick={closeSidebar}>Home</a></li>
+          <li><a href="#profile" onClick={closeSidebar}>Profile</a></li>
+          <li><a href="#settings" onClick={closeSidebar}>Settings</a></li>
+          <li><a href="#logout" onClick={closeSidebar}>Logout</a></li>
+        </ul>
+      </div>
+
       <div className="chat-header">
         <div className="header-content">
           {/* Hamburger Button */}
@@ -107,22 +183,34 @@ function App() {
               <p>Enterprise AI Support</p>
             </div>
           </div>
-          <div className="status-indicator online"></div>
+          {/* Removed status indicator as per previous request */}
         </div>
 
         {/* Search Bar */}
-        <div className="search-bar">
+        <div className="search-bar" ref={searchInputRef}> {/* Attach ref here */}
           <input
             type="text"
-            placeholder="Search messages..."
+            placeholder="Search categories..."
             value={searchQuery}
             onChange={handleSearchChange}
-            aria-label="Search messages"
+            onFocus={handleSearchFocus}
+            aria-label="Search categories"
           />
           {/* Search Icon (using SVG for simplicity, can be a Font Awesome icon) */}
           <svg className="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19ZM21 21L16.65 16.65" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
+
+          {/* Search Results Dropdown */}
+          {showSearchResults && searchResults.length > 0 && (
+            <ul className="search-results-dropdown">
+              {searchResults.map((result, index) => (
+                <li key={index} onClick={() => handleSelectSearchResult(result)}>
+                  {result}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </div>
 
