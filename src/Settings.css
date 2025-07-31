@@ -1,0 +1,46 @@
+/* Settings.css */
+
+/*
+ * This file provides styles for the Settings component.
+ * It uses a flexbox layout to center content on the page.
+ */
+.settings-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 1.5rem;
+  background-color: #f7f7f7;
+  text-align: center;
+}
+
+.settings-page h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.settings-page p {
+  font-size: 1.125rem;
+  color: #555;
+  margin-bottom: 1.5rem;
+}
+
+/* Styles for the button */
+.settings-page button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px; /* Rounded-full */
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: white;
+  background-color: #1f2937; /* Gray-800 */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: background-color 0.3s ease-in-out;
+}
+
+.settings-page button:hover {
+  background-color: #111827; /* Gray-900 */
+}
+

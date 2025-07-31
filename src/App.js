@@ -4,6 +4,7 @@ import './Auth.css'; // Styles for Login/Signup pages
 import Login from './Login'; // Import the Login component
 import Signup from './Signup'; // Import the Signup component
 import MyAccount from './MyAccount'; // Import the MyAccount component
+import Settings from './Settings'; // Import the Settings component
 
 function App() {
   const [messages, setMessages] = useState([
@@ -16,7 +17,7 @@ function App() {
   const [searchResults, setSearchResults] = useState([]); // State for dummy search results
   const [showSearchResults, setShowSearchResults] = useState(false); // State to control visibility of search results
   const [showLoadingScreen, setShowLoadingScreen] = useState(true); // State for the loading screen
-  const [currentView, setCurrentView] = useState('loading'); // State to manage current view: 'loading', 'login', 'signup', 'chat', 'myAccount'
+  const [currentView, setCurrentView] = useState('loading'); // State to manage current view: 'loading', 'login', 'signup', 'chat', 'myAccount', 'settings'
   const [selectedCategory, setSelectedCategory] = useState(null); // State to store the selected category for API calls
   const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
   const [loggedInUsername, setLoggedInUsername] = useState(null); // State for logged-in username
@@ -30,6 +31,16 @@ function App() {
   });
   const [hasFrequentChatterAchievement, setHasFrequentChatterAchievement] = useState(() => {
     return localStorage.getItem('hasFrequentChatterAchievement') === 'true';
+  });
+  // New states for the streak achievement
+  const [messageStreak, setMessageStreak] = useState(() => {
+    return parseInt(localStorage.getItem('messageStreak') || '0', 10);
+  });
+  const [lastMessageDate, setLastMessageDate] = useState(() => {
+    return localStorage.getItem('lastMessageDate') || null;
+  });
+  const [hasStreakAchievement, setHasStreakAchievement] = useState(() => {
+      return localStorage.getItem('hasStreakAchievement') === 'true';
   });
 
   const chatContainerRef = useRef(null);
@@ -101,7 +112,40 @@ function App() {
       if (newCount >= 3 && !hasFrequentChatterAchievement) {
         setHasFrequentChatterAchievement(true);
         localStorage.setItem('hasFrequentChatterAchievement', 'true');
-        alert("Achievement Unlocked: Frequent Chatter!"); // Simple notification
+        alert("Achievement Unlocked: Frequent Chatter!"); // Simple notification (should be replaced with a custom modal)
+      }
+
+      // Streak logic
+      const today = new Date();
+      const todayStr = today.toISOString().split('T')[0];
+      const lastDateStr = localStorage.getItem('lastMessageDate');
+      let newStreak = messageStreak;
+
+      // Only update the streak if a new message is sent on a new day
+      if (lastDateStr !== todayStr) {
+        if (lastDateStr) {
+          const lastDate = new Date(lastDateStr);
+          const diffDays = Math.floor((today - lastDate) / (1000 * 60 * 60 * 24));
+          if (diffDays === 1) {
+            newStreak += 1;
+          } else if (diffDays > 1) {
+            newStreak = 1;
+          }
+        } else {
+          newStreak = 1;
+        }
+
+        setMessageStreak(newStreak);
+        localStorage.setItem('messageStreak', newStreak.toString());
+        setLastMessageDate(todayStr);
+        localStorage.setItem('lastMessageDate', todayStr);
+      }
+      
+      // Check for streak achievement
+      if (newStreak >= 3 && !hasStreakAchievement) {
+        setHasStreakAchievement(true);
+        localStorage.setItem('hasStreakAchievement', 'true');
+        alert("Achievement Unlocked: 3-Day Streak!"); // Simple notification (should be replaced with a custom modal)
       }
     }
 
@@ -203,6 +247,8 @@ function App() {
   const handleLoginSuccess = (username) => {
     setIsLoggedIn(true);
     setLoggedInUsername(username);
+    // Load the profile picture from local storage on successful login
+    setLoggedInUserProfilePic(localStorage.getItem('profilePictureUrl') || null);
     // Reset message count on login for achievement tracking for this session
     setMessageCount(0);
     localStorage.setItem('messageCount', '0');
@@ -236,6 +282,11 @@ function App() {
     closeSidebar();
   };
 
+  const handleGoToSettings = () => {
+    setCurrentView('settings');
+    closeSidebar();
+  };
+
   const handleGoToChat = () => {
     setCurrentView('chat');
     closeSidebar();
@@ -245,7 +296,7 @@ function App() {
     setIsLoggedIn(false);
     setLoggedInUsername(null);
     setLoggedInUserProfilePic(null); // Clear profile pic on logout
-    localStorage.removeItem('profilePictureUrl'); // Clear from localStorage
+    // Keep the profile picture URL in localStorage for the next login
     localStorage.removeItem('messageCount'); // Clear message count on logout
     // Keep hasFrequentChatterAchievement as it's a permanent achievement
     setMessages([{ text: "Hello! I'm your AgentGO assistant. How can I help you today?", sender: 'bot' }]); // Reset messages
@@ -275,6 +326,8 @@ function App() {
             onGoToChat={handleGoToChat}
           />
         );
+      case 'settings':
+        return <Settings onGoToChat={handleGoToChat} />;
       case 'chat':
         return (
           <>
@@ -294,7 +347,7 @@ function App() {
               <ul className="sidebar-nav">
                 <li><a href="#home" onClick={handleGoToChat}>Home</a></li>
                 {isLoggedIn && <li><a href="#myaccount" onClick={handleGoToMyAccount}>My Account</a></li>}
-                <li><a href="#settings" onClick={closeSidebar}>Settings</a></li>
+                <li><a href="#settings" onClick={handleGoToSettings}>Settings</a></li>
                 {isLoggedIn ? (
                   <li><a href="#logout" onClick={handleLogout}>Logout</a></li>
                 ) : (
@@ -349,10 +402,24 @@ function App() {
                           <span className="achievement-text">Frequent Chatter</span>
                         </div>
                       )}
-                      {/* Add more achievements here */}
+                      {isLoggedIn && hasStreakAchievement && (
+                        <div className="achievement-item">
+                          <svg className="achievement-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                          </svg>
+                          <span className="achievement-text">Streak Master</span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
+                {/* Streak Display on the right side of the header */}
+                {isLoggedIn && messageStreak > 0 && (
+                  <div className="streak-display">
+                    <span className="streak-icon" style={{ color: 'black', fontSize: '1.5rem' }} role="img" aria-label="Fire emoji">🔥</span>
+                    <span className="streak-count">{messageStreak}</span>
+                  </div>
+                )}
               </div>
 
               {/* Search Bar */}
