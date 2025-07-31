@@ -42,7 +42,6 @@ function App() {
     "Classic 😊",
     "Trivia 🤓",
     "Cooking 👨‍🍳",
-    "Science 🔬"
   ];
 
   // Helper function to strip emojis from a string
