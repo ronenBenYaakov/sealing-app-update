@@ -478,8 +478,8 @@ body {
 .chat-messages {
     flex: 1;
     padding: 20px 24px;
-    /* Add extra padding at the bottom for mobile safe area, accounting for fixed input */
-    padding-bottom: calc(20px + 88px + env(safe-area-inset-bottom)); /* 88px is approx height of fixed chat-input */
+    /* Increased padding at the bottom to prevent overlap with fixed input */
+    padding-bottom: calc(20px + 100px + env(safe-area-inset-bottom)); /* Adjusted from 88px to 100px for more buffer */
     overflow-y: auto;
     display: flex;
     flex-direction: column;
@@ -716,4 +716,36 @@ body {
         width: 20px;
         height: 20px;
     }
+}
+
+/* Achievements Section Styles */
+.achievements-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+    justify-content: center; /* Center achievements */
+}
+
+.achievement-item {
+    display: flex;
+    align-items: center;
+    background-color: #f0f0f0; /* Light background for achievement badge */
+    border-radius: 20px;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    color: #555555;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.achievement-icon {
+    width: 18px;
+    height: 18px;
+    margin-right: 6px;
+    color: #333333; /* Dark color for the icon */
+    fill: none; /* Ensure fill is none for stroke-based icons */
+}
+
+.achievement-text {
+    font-weight: 500;
 }
