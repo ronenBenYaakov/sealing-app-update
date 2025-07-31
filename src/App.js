@@ -1,5 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import './App.css'; // Make sure this CSS file is in the same directory
+import './App.css'; // Main app styles
+import './Auth.css'; // Styles for Login/Signup pages
+import Login from './Login'; // Import the Login component
+import Signup from './Signup'; // Import the Signup component
+import MyAccount from './MyAccount'; // Import the new MyAccount component
 
 function App() {
   const [messages, setMessages] = useState([
@@ -12,7 +16,14 @@ function App() {
   const [searchResults, setSearchResults] = useState([]); // State for dummy search results
   const [showSearchResults, setShowSearchResults] = useState(false); // State to control visibility of search results
   const [showLoadingScreen, setShowLoadingScreen] = useState(true); // State for the loading screen
-  const [selectedCategory, setSelectedCategory] = useState(null); // New state to store the selected category for API calls
+  const [currentView, setCurrentView] = useState('loading'); // State to manage current view: 'loading', 'login', 'signup', 'chat', 'myAccount'
+  const [selectedCategory, setSelectedCategory] = useState(null); // State to store the selected category for API calls
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
+  const [loggedInUsername, setLoggedInUsername] = useState(null); // State for logged-in username
+  const [loggedInUserProfilePic, setLoggedInUserProfilePic] = useState(() => {
+    // Initialize profile pic from localStorage if available
+    return localStorage.getItem('profilePictureUrl') || null;
+  });
   const chatContainerRef = useRef(null);
   const prevScrollTop = useRef(0);
   const prevScrollHeight = useRef(0);
@@ -20,10 +31,10 @@ function App() {
 
   // Dummy data for categories
   const dummyCategories = [
-    "Classic 😊", // Added smiling emoji
-    "Trivia 🤓",   // Added smart guy emoji
-    "Cooking 👨‍🍳",    // Updated Chef category with the correct emoji
-    "Science 🔬"   // Added Science category with emoji
+    "Classic 😊",
+    "Trivia 🤓",
+    "Cooking 👨‍🍳",
+    "Science 🔬"
   ];
 
   // Helper function to strip emojis from a string
@@ -39,7 +50,6 @@ function App() {
 
     // If a category is selected, append it to the URL
     if (selectedCategory) {
-      // Ensure the selectedCategory is already cleaned and lowercased for the URL path
       apiUrl = `https://yearly-notable-newt.ngrok-free.app/agent-go/chat/${selectedCategory.toLowerCase().replace(/\s/g, '-')}`;
     }
 
@@ -47,7 +57,7 @@ function App() {
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: 'current_user', message })
+        body: JSON.stringify({ username: loggedInUsername || 'guest', message }) // Use loggedInUsername
       });
       if (!response.ok) throw new Error('Network response was not ok');
       const data = await response.json();
@@ -134,13 +144,12 @@ function App() {
 
   // Handler for selecting a search result
   const handleSelectSearchResult = (result) => {
-    // Extract the first word from the result string
     const firstWord = result.split(' ')[0];
-    const cleanedResult = stripEmojis(firstWord); // Strip emojis from only the first word
-    setSearchQuery(result); // Keep emoji in the input display for selected item
-    setSelectedCategory(cleanedResult); // Set the selected category for API
-    setSearchResults([]); // Clear results
-    setShowSearchResults(false); // Hide results
+    const cleanedResult = stripEmojis(firstWord);
+    setSearchQuery(result);
+    setSelectedCategory(cleanedResult);
+    setSearchResults([]);
+    setShowSearchResults(false);
     console.log("Selected category for API (first word, no emoji):", cleanedResult);
   };
 
@@ -158,148 +167,233 @@ function App() {
     };
   }, [searchInputRef]);
 
-  // Effect for the loading screen animation (sound removed)
+  // Effect for the loading screen animation and transitioning to chat
   useEffect(() => {
     if (showLoadingScreen) {
-      // Total animation duration: typing (2s) + fade out (1s) + small buffer (0.5s)
       const totalAnimationDuration = 2000 + 1000 + 500; // 3.5 seconds
       const timer = setTimeout(() => {
         setShowLoadingScreen(false);
+        setCurrentView('chat'); // Transition directly to chat screen after loading animation
       }, totalAnimationDuration);
       return () => clearTimeout(timer);
     }
   }, [showLoadingScreen]);
 
+  // Functions to switch between views and handle authentication
+  const handleLoginSuccess = (username) => { // Removed profilePictureUrl from params
+    setIsLoggedIn(true);
+    setLoggedInUsername(username);
+    // Profile picture is now managed through MyAccount or localStorage
+    setCurrentView('chat');
+  };
 
-  return (
-    <div className="agent-go-container">
-      {/* Loading Screen */}
-      {showLoadingScreen && (
-        <div className="loading-screen">
-          <h1 className="loading-text">Welcome to Sealing</h1>
-        </div>
-      )}
+  const handleSignupSuccess = (username) => { // Removed profilePictureUrl from params
+    setLoggedInUsername(username); // Temporarily set username for display if needed
+    setCurrentView('login');
+  };
 
-      {/* Sidebar Overlay */}
-      {isMenuOpen && <div className="sidebar-overlay" onClick={closeSidebar}></div>}
+  const handleUpdateProfilePic = (newUrl) => {
+    setLoggedInUserProfilePic(newUrl);
+    localStorage.setItem('profilePictureUrl', newUrl); // Store in localStorage
+  };
 
-      {/* Sidebar */}
-      <div className={`sidebar ${isMenuOpen ? 'open' : ''}`}>
-        <div className="sidebar-header">
-          <h2>Menu</h2>
-          <button className="close-sidebar-button" onClick={closeSidebar} aria-label="Close menu">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
-        </div>
-        <ul className="sidebar-nav">
-          <li><a href="#home" onClick={closeSidebar}>Home</a></li>
-          <li><a href="#profile" onClick={closeSidebar}>Profile</a></li>
-          <li><a href="#settings" onClick={closeSidebar}>Settings</a></li>
-          <li><a href="#logout" onClick={closeSidebar}>Logout</a></li>
-        </ul>
-      </div>
+  const handleSwitchToSignup = () => {
+    setCurrentView('signup');
+    closeSidebar();
+  };
 
-      <div className="chat-header">
-        <div className="header-content">
-          {/* Hamburger Button */}
-          <button
-            className={`hamburger-button ${isMenuOpen ? 'open' : ''}`}
-            onClick={handleHamburgerClick}
-            aria-label="Toggle menu"
-          >
-            <span className="hamburger-line"></span>
-            <span className="hamburger-line"></span>
-            <span className="hamburger-line"></span>
-          </button>
+  const handleSwitchToLogin = () => {
+    setCurrentView('login');
+    closeSidebar();
+  };
 
-          <div className="assistant-info">
-            <div className="assistant-details">
-              <h1>AgentGO</h1>
-            </div>
+  const handleGoToMyAccount = () => {
+    setCurrentView('myAccount');
+    closeSidebar();
+  };
+
+  const handleGoToChat = () => {
+    setCurrentView('chat');
+    closeSidebar();
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setLoggedInUsername(null);
+    setLoggedInUserProfilePic(null); // Clear profile pic on logout
+    localStorage.removeItem('profilePictureUrl'); // Clear from localStorage
+    setMessages([{ text: "Hello! I'm your AgentGO assistant. How can I help you today?", sender: 'bot' }]); // Reset messages
+    setCurrentView('login');
+    closeSidebar();
+  };
+
+  // Conditional rendering based on currentView state
+  const renderContent = () => {
+    switch (currentView) {
+      case 'loading':
+        return (
+          <div className="loading-screen">
+            <h1 className="loading-text">Welcome to Sealing</h1>
           </div>
-        </div>
-
-        {/* Search Bar */}
-        <div className="search-bar" ref={searchInputRef}>
-          <input
-            type="text"
-            placeholder="Search categories..."
-            value={searchQuery}
-            onChange={handleSearchChange}
-            onFocus={handleSearchFocus}
-            aria-label="Search categories"
+        );
+      case 'login':
+        return <Login onLoginSuccess={handleLoginSuccess} onSwitchToSignup={handleSwitchToSignup} />;
+      case 'signup':
+        return <Signup onSignupSuccess={handleSignupSuccess} onSwitchToLogin={handleSwitchToLogin} />;
+      case 'myAccount':
+        return (
+          <MyAccount
+            username={loggedInUsername}
+            currentProfilePic={loggedInUserProfilePic}
+            onUpdateProfilePic={handleUpdateProfilePic}
+            onGoToChat={handleGoToChat}
           />
-          <svg className="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19ZM21 21L16.65 16.65" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
+        );
+      case 'chat':
+        return (
+          <>
+            {/* Sidebar Overlay */}
+            {isMenuOpen && <div className="sidebar-overlay" onClick={closeSidebar}></div>}
 
-          {/* Search Results Dropdown */}
-          {showSearchResults && searchResults.length > 0 && (
-            <ul className="search-results-dropdown">
-              {searchResults.map((result, index) => (
-                <li key={index} onClick={() => handleSelectSearchResult(result)}>
-                  {result}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      </div>
-
-      <div className="chat-container">
-        <div className="chat-messages" ref={chatContainerRef}>
-          {messages.map(({ text, sender }, index) => (
-            <div key={index} className={`message ${sender}`}>
-              <div className="message-content">{text}</div>
+            {/* Sidebar */}
+            <div className={`sidebar ${isMenuOpen ? 'open' : ''}`}>
+              <div className="sidebar-header">
+                <h2>Menu</h2>
+                <button className="close-sidebar-button" onClick={closeSidebar} aria-label="Close menu">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+              </div>
+              <ul className="sidebar-nav">
+                <li><a href="#home" onClick={handleGoToChat}>Home</a></li> {/* Changed to goToChat */}
+                {isLoggedIn && <li><a href="#myaccount" onClick={handleGoToMyAccount}>My Account</a></li>} {/* New My Account link */}
+                <li><a href="#settings" onClick={closeSidebar}>Settings</a></li>
+                {isLoggedIn ? (
+                  <li><a href="#logout" onClick={handleLogout}>Logout</a></li>
+                ) : (
+                  <>
+                    <li><a href="#login" onClick={handleSwitchToLogin}>Log In</a></li>
+                    <li><a href="#signup" onClick={handleSwitchToSignup}>Sign Up</a></li>
+                  </>
+                )}
+              </ul>
             </div>
-          ))}
 
-          {isLoading && (
-            <div className="message bot">
-              <div className="message-content">
-                <div className="typing-indicator">
-                  <span></span>
-                  <span></span>
-                  <span></span>
+            <div className="chat-header">
+              <div className="header-content">
+                {/* Hamburger Button */}
+                <button
+                  className={`hamburger-button ${isMenuOpen ? 'open' : ''}`}
+                  onClick={handleHamburgerClick}
+                  aria-label="Toggle menu"
+                >
+                  <span className="hamburger-line"></span>
+                  <span className="hamburger-line"></span>
+                  <span className="hamburger-line"></span>
+                </button>
+
+                <div className="assistant-info">
+                  {/* Profile Picture Display */}
+                  {isLoggedIn && loggedInUserProfilePic && (
+                    <img
+                      src={loggedInUserProfilePic}
+                      alt="Profile"
+                      className="profile-picture"
+                      onError={(e) => { e.target.onerror = null; e.target.src="https://placehold.co/50x50/cccccc/ffffff?text=User"; }} // Fallback
+                    />
+                  )}
+                  <div className="assistant-details">
+                    <h1>AgentGO</h1>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-        </div>
 
-        <form onSubmit={handleSendMessage} className="chat-input">
-          <input
-            type="text"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            placeholder="Type your message here..."
-            disabled={isLoading}
-            aria-label="Message input"
-          />
-          <button type="submit" disabled={isLoading} aria-label="Send message">
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M7 11L12 6L17 11M12 18V7"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                transform="rotate(90 12 12)"
-              />
-            </svg>
-          </button>
-        </form>
-      </div>
-    </div>
-  );
+              {/* Search Bar */}
+              <div className="search-bar" ref={searchInputRef}>
+                <input
+                  type="text"
+                  placeholder="Search categories..."
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  onFocus={handleSearchFocus}
+                  aria-label="Search categories"
+                />
+                <svg className="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19ZM21 21L16.65 16.65" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+
+                {/* Search Results Dropdown */}
+                {showSearchResults && searchResults.length > 0 && (
+                  <ul className="search-results-dropdown">
+                    {searchResults.map((result, index) => (
+                      <li key={index} onClick={() => handleSelectSearchResult(result)}>
+                        {result}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </div>
+
+            <div className="chat-container">
+              <div className="chat-messages" ref={chatContainerRef}>
+                {messages.map(({ text, sender }, index) => (
+                  <div key={index} className={`message ${sender}`}>
+                    <div className="message-content">{text}</div>
+                  </div>
+                ))}
+
+                {isLoading && (
+                  <div className="message bot">
+                    <div className="message-content">
+                      <div className="typing-indicator">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <form onSubmit={handleSendMessage} className="chat-input">
+                <input
+                  type="text"
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  placeholder="Type your message here..."
+                  disabled={isLoading}
+                  aria-label="Message input"
+                />
+                <button type="submit" disabled={isLoading} aria-label="Send message">
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M7 11L12 6L17 11M12 18V7"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      transform="rotate(90 12 12)"
+                    />
+                  </svg>
+                </button>
+              </form>
+            </div>
+          </>
+        );
+      default:
+        return null;
+    }
+  };
+
+  return <div className="agent-go-container">{renderContent()}</div>;
 }
 
 export default App;

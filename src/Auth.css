@@ -1,0 +1,153 @@
+/* Auth Container */
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    width: 100vw;
+    background-color: #f8f8f8; /* Matches body background */
+    position: fixed; /* Ensures it covers the whole screen */
+    top: 0;
+    left: 0;
+    z-index: 500; /* Above main app content, below loading screen */
+}
+
+/* Auth Card (Login/Signup Box) */
+.auth-card {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
+    margin: 20px; /* Add some margin for smaller screens */
+}
+
+.auth-card h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #333333;
+    margin-bottom: 30px;
+}
+
+/* Form Group */
+.auth-form .form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.auth-form label {
+    display: block;
+    font-size: 0.95rem;
+    color: #555555;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.auth-form input {
+    width: 100%;
+    padding: 14px 18px;
+    border: 1px solid #dcdcdc;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #333333;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box; /* Include padding in width */
+}
+
+.auth-form input:focus {
+    border-color: #333333;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+.auth-form input::placeholder {
+    color: #a0a0a0;
+}
+
+/* Auth Button */
+.auth-button {
+    width: 100%;
+    padding: 15px;
+    background-color: #333333;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    margin-top: 10px;
+}
+
+.auth-button:hover {
+    background-color: #000000;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+.auth-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.auth-button:disabled {
+    background-color: #d0d0d0;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+/* Error Message */
+.auth-error {
+    color: #e74c3c; /* Red for errors */
+    font-size: 0.9rem;
+    margin-top: -10px;
+    margin-bottom: 15px;
+}
+
+/* Switch Link (e.g., "Sign Up" or "Log In" link) */
+.auth-switch {
+    font-size: 0.95rem;
+    color: #666666;
+    margin-top: 25px;
+}
+
+.auth-switch .switch-link {
+    color: #333333; /* Darker link color */
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.auth-switch .switch-link:hover {
+    color: #000000; /* Black on hover */
+    text-decoration: underline;
+}
+
+/* Responsive adjustments for auth pages */
+@media (max-width: 600px) {
+    .auth-card {
+        padding: 30px 20px;
+        margin: 15px;
+    }
+
+    .auth-card h2 {
+        font-size: 1.8rem;
+        margin-bottom: 25px;
+    }
+
+    .auth-form input {
+        padding: 12px 15px;
+        font-size: 0.95rem;
+    }
+
+    .auth-button {
+        padding: 12px;
+        font-size: 1rem;
+    }
+}
