@@ -484,6 +484,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 14px;
+    overflow-y: auto;
     scroll-behavior: smooth;
     /* Custom Scrollbar for Webkit browsers (Chrome, Safari) */
     &::-webkit-scrollbar {
@@ -743,7 +744,7 @@ body {
     height: 18px;
     margin-right: 6px;
     color: #333333; /* Dark color for the icon */
-    fill: none; /* Ensure fill is none for stroke-based icons */
+    fill: none; /* Ensure fill s none for stroke-based icons */
 }
 
 .achievement-text {
