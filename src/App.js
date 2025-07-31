@@ -22,7 +22,8 @@ function App() {
   const dummyCategories = [
     "Classic 😊", // Added smiling emoji
     "Trivia 🤓",   // Added smart guy emoji
-    "Chef 👨‍🍳"    // Added Chef category with emoji
+    "Cooking 👨‍🍳",    // Updated Chef category with the correct emoji
+    "Science 🔬"   // Added Science category with emoji
   ];
 
   // Helper function to strip emojis from a string
