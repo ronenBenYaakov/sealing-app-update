@@ -479,12 +479,11 @@ body {
     flex: 1;
     padding: 20px 24px;
     /* Increased padding at the bottom to prevent overlap with fixed input */
-    padding-bottom: calc(20px + 140px + env(safe-area-inset-bottom)); /* Adjusted from 120px to 140px for more buffer */
+    padding-bottom: calc(20px + 160px + env(safe-area-inset-bottom)); /* Adjusted from 140px to 160px for more buffer */
     overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 14px;
-    overflow-y: auto;
     scroll-behavior: smooth;
     /* Custom Scrollbar for Webkit browsers (Chrome, Safari) */
     &::-webkit-scrollbar {
@@ -508,7 +507,7 @@ body {
 
     /* Firefox scrollbar styling (less customizable) */
     scrollbar-width: thin; /* "auto" or "none" */
-    scrollbar-color: #888 #f0f0f0; /* thumb color track color */
+    scrollbar-color: #888 #f0f0f0; /* thumb color track track */
 }
 
 
@@ -688,7 +687,7 @@ body {
         padding: 16px 20px;
         gap: 12px;
         /* Ensure mobile-specific padding-bottom is applied */
-        padding-bottom: calc(16px + 88px + env(safe-area-inset-bottom)); /* Adjusted for fixed input */
+        padding-bottom: calc(16px + 108px + env(safe-area-inset-bottom)); /* Adjusted for fixed input */
     }
 
     .message-content {
@@ -744,7 +743,7 @@ body {
     height: 18px;
     margin-right: 6px;
     color: #333333; /* Dark color for the icon */
-    fill: none; /* Ensure fill s none for stroke-based icons */
+    fill: none; /* Ensure fill is none for stroke-based icons */
 }
 
 .achievement-text {
