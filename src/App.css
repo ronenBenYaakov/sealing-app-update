@@ -479,7 +479,7 @@ body {
     flex: 1;
     padding: 20px 24px;
     /* Increased padding at the bottom to prevent overlap with fixed input */
-    padding-bottom: calc(20px + 100px + env(safe-area-inset-bottom)); /* Adjusted from 88px to 100px for more buffer */
+    padding-bottom: calc(20px + 120px + env(safe-area-inset-bottom)); /* Adjusted from 100px to 120px for more buffer */
     overflow-y: auto;
     display: flex;
     flex-direction: column;
