@@ -3,7 +3,7 @@ import './App.css'; // Main app styles
 import './Auth.css'; // Styles for Login/Signup pages
 import Login from './Login'; // Import the Login component
 import Signup from './Signup'; // Import the Signup component
-import MyAccount from './MyAccount'; // Import the new MyAccount component
+import MyAccount from './MyAccount'; // Import the MyAccount component
 
 function App() {
   const [messages, setMessages] = useState([
@@ -24,6 +24,14 @@ function App() {
     // Initialize profile pic from localStorage if available
     return localStorage.getItem('profilePictureUrl') || null;
   });
+  // New states for achievements
+  const [messageCount, setMessageCount] = useState(() => {
+    return parseInt(localStorage.getItem('messageCount') || '0', 10);
+  });
+  const [hasFrequentChatterAchievement, setHasFrequentChatterAchievement] = useState(() => {
+    return localStorage.getItem('hasFrequentChatterAchievement') === 'true';
+  });
+
   const chatContainerRef = useRef(null);
   const prevScrollTop = useRef(0);
   const prevScrollHeight = useRef(0);
@@ -83,6 +91,19 @@ function App() {
     if (container) {
       prevScrollTop.current = container.scrollTop;
       prevScrollHeight.current = container.scrollHeight;
+    }
+
+    // Increment message count and check for achievement if logged in
+    if (isLoggedIn) {
+      const newCount = messageCount + 1;
+      setMessageCount(newCount);
+      localStorage.setItem('messageCount', newCount.toString());
+
+      if (newCount >= 3 && !hasFrequentChatterAchievement) {
+        setHasFrequentChatterAchievement(true);
+        localStorage.setItem('hasFrequentChatterAchievement', 'true');
+        alert("Achievement Unlocked: Frequent Chatter!"); // Simple notification
+      }
     }
 
     const aiResponse = await sendMessageToAPI(userMessage);
@@ -180,15 +201,19 @@ function App() {
   }, [showLoadingScreen]);
 
   // Functions to switch between views and handle authentication
-  const handleLoginSuccess = (username) => { // Removed profilePictureUrl from params
+  const handleLoginSuccess = (username) => {
     setIsLoggedIn(true);
     setLoggedInUsername(username);
-    // Profile picture is now managed through MyAccount or localStorage
+    // Reset message count on login for achievement tracking for this session
+    setMessageCount(0);
+    localStorage.setItem('messageCount', '0');
+    // Check if the frequent chatter achievement was already earned
+    setHasFrequentChatterAchievement(localStorage.getItem('hasFrequentChatterAchievement') === 'true');
     setCurrentView('chat');
   };
 
-  const handleSignupSuccess = (username) => { // Removed profilePictureUrl from params
-    setLoggedInUsername(username); // Temporarily set username for display if needed
+  const handleSignupSuccess = (username) => {
+    setLoggedInUsername(username);
     setCurrentView('login');
   };
 
@@ -222,6 +247,8 @@ function App() {
     setLoggedInUsername(null);
     setLoggedInUserProfilePic(null); // Clear profile pic on logout
     localStorage.removeItem('profilePictureUrl'); // Clear from localStorage
+    localStorage.removeItem('messageCount'); // Clear message count on logout
+    // Keep hasFrequentChatterAchievement as it's a permanent achievement
     setMessages([{ text: "Hello! I'm your AgentGO assistant. How can I help you today?", sender: 'bot' }]); // Reset messages
     setCurrentView('login');
     closeSidebar();
@@ -266,8 +293,8 @@ function App() {
                 </button>
               </div>
               <ul className="sidebar-nav">
-                <li><a href="#home" onClick={handleGoToChat}>Home</a></li> {/* Changed to goToChat */}
-                {isLoggedIn && <li><a href="#myaccount" onClick={handleGoToMyAccount}>My Account</a></li>} {/* New My Account link */}
+                <li><a href="#home" onClick={handleGoToChat}>Home</a></li>
+                {isLoggedIn && <li><a href="#myaccount" onClick={handleGoToMyAccount}>My Account</a></li>}
                 <li><a href="#settings" onClick={closeSidebar}>Settings</a></li>
                 {isLoggedIn ? (
                   <li><a href="#logout" onClick={handleLogout}>Logout</a></li>
@@ -305,6 +332,26 @@ function App() {
                   )}
                   <div className="assistant-details">
                     <h1>AgentGO</h1>
+                    {/* Achievements Section */}
+                    <div className="achievements-section">
+                      {isLoggedIn && (
+                        <div className="achievement-item">
+                          <svg className="achievement-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                          </svg>
+                          <span className="achievement-text">Account Holder</span>
+                        </div>
+                      )}
+                      {isLoggedIn && hasFrequentChatterAchievement && (
+                        <div className="achievement-item">
+                          <svg className="achievement-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                          </svg>
+                          <span className="achievement-text">Frequent Chatter</span>
+                        </div>
+                      )}
+                      {/* Add more achievements here */}
+                    </div>
                   </div>
                 </div>
               </div>
