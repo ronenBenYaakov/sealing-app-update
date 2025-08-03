@@ -6,6 +6,17 @@ import Signup from './Signup'; // Import the Signup component
 import MyAccount from './MyAccount'; // Import the MyAccount component
 import Settings from './Settings'; // Import the Settings component
 
+// Initial state for user data to ensure a clean slate
+const initialUserState = {
+  username: null,
+  profilePic: null,
+  messageCount: 0,
+  hasFrequentChatterAchievement: false,
+  messageStreak: 0,
+  lastMessageDate: null,
+  hasStreakAchievement: false,
+};
+
 function App() {
   const [messages, setMessages] = useState([
     { text: "Hello! I'm your AgentGO assistant. How can I help you today?", sender: 'bot' }
@@ -20,27 +31,14 @@ function App() {
   const [currentView, setCurrentView] = useState('loading'); // State to manage current view: 'loading', 'login', 'signup', 'chat', 'myAccount', 'settings'
   const [selectedCategory, setSelectedCategory] = useState(null); // State to store the selected category for API calls
   const [isLoggedIn, setIsLoggedIn] = useState(false); // State to track login status
-  const [loggedInUsername, setLoggedInUsername] = useState(null); // State for logged-in username
-  const [loggedInUserProfilePic, setLoggedInUserProfilePic] = useState(() => {
-    // Initialize profile pic from localStorage if available
-    return localStorage.getItem('profilePictureUrl') || null;
-  });
-  // New states for achievements
-  const [messageCount, setMessageCount] = useState(() => {
-    return parseInt(localStorage.getItem('messageCount') || '0', 10);
-  });
-  const [hasFrequentChatterAchievement, setHasFrequentChatterAchievement] = useState(() => {
-    return localStorage.getItem('hasFrequentChatterAchievement') === 'true';
-  });
-  // New states for the streak achievement
-  const [messageStreak, setMessageStreak] = useState(() => {
-    return parseInt(localStorage.getItem('messageStreak') || '0', 10);
-  });
-  const [lastMessageDate, setLastMessageDate] = useState(() => {
-    return localStorage.getItem('lastMessageDate') || null;
-  });
-  const [hasStreakAchievement, setHasStreakAchievement] = useState(() => {
-      return localStorage.getItem('hasStreakAchievement') === 'true';
+  const [isUserDataReady, setIsUserDataReady] = useState(false); // New state to control rendering of user-specific data
+  // Consolidated user state
+  const [user, setUser] = useState(initialUserState);
+  // New state for custom achievement notification
+  const [achievementNotification, setAchievementNotification] = useState({
+    isVisible: false,
+    title: '',
+    text: '',
   });
 
   const chatContainerRef = useRef(null);
@@ -60,6 +58,15 @@ function App() {
     // Regex to match common emoji ranges
     return str.replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '').trim();
   };
+  
+  // Function to show custom achievement notification
+  const showAchievementNotification = (title, text) => {
+    setAchievementNotification({
+      isVisible: true,
+      title,
+      text,
+    });
+  };
 
   // Function to send message to API
   const sendMessageToAPI = async (message) => {
@@ -75,7 +82,7 @@ function App() {
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: loggedInUsername || 'guest', message }) // Use loggedInUsername
+        body: JSON.stringify({ username: user.username || 'guest', message }) // Use user.username
       });
       if (!response.ok) throw new Error('Network response was not ok');
       const data = await response.json();
@@ -105,21 +112,15 @@ function App() {
 
     // Increment message count and check for achievement if logged in
     if (isLoggedIn) {
-      const newCount = messageCount + 1;
-      setMessageCount(newCount);
-      localStorage.setItem('messageCount', newCount.toString());
-
-      if (newCount >= 3 && !hasFrequentChatterAchievement) {
-        setHasFrequentChatterAchievement(true);
-        localStorage.setItem('hasFrequentChatterAchievement', 'true');
-        alert("Achievement Unlocked: Frequent Chatter!"); // Simple notification (should be replaced with a custom modal)
-      }
+      const newCount = user.messageCount + 1;
+      const newHasFrequentChatterAchievement = newCount >= 3;
+      localStorage.setItem(`messageCount_${user.username}`, newCount.toString());
 
       // Streak logic
       const today = new Date();
       const todayStr = today.toISOString().split('T')[0];
-      const lastDateStr = localStorage.getItem('lastMessageDate');
-      let newStreak = messageStreak;
+      const lastDateStr = user.lastMessageDate;
+      let newStreak = user.messageStreak;
 
       // Only update the streak if a new message is sent on a new day
       if (lastDateStr !== todayStr) {
@@ -134,18 +135,31 @@ function App() {
         } else {
           newStreak = 1;
         }
-
-        setMessageStreak(newStreak);
-        localStorage.setItem('messageStreak', newStreak.toString());
-        setLastMessageDate(todayStr);
-        localStorage.setItem('lastMessageDate', todayStr);
       }
       
-      // Check for streak achievement
-      if (newStreak >= 3 && !hasStreakAchievement) {
-        setHasStreakAchievement(true);
-        localStorage.setItem('hasStreakAchievement', 'true');
-        alert("Achievement Unlocked: 3-Day Streak!"); // Simple notification (should be replaced with a custom modal)
+      const newHasStreakAchievement = newStreak >= 3;
+
+      // Update state with new values
+      setUser(prevUser => ({
+        ...prevUser,
+        messageCount: newCount,
+        hasFrequentChatterAchievement: newHasFrequentChatterAchievement,
+        messageStreak: newStreak,
+        lastMessageDate: todayStr,
+        hasStreakAchievement: newHasStreakAchievement,
+      }));
+
+      localStorage.setItem(`hasFrequentChatterAchievement_${user.username}`, newHasFrequentChatterAchievement.toString());
+      localStorage.setItem(`messageStreak_${user.username}`, newStreak.toString());
+      localStorage.setItem(`lastMessageDate_${user.username}`, todayStr);
+      localStorage.setItem(`hasStreakAchievement_${user.username}`, newHasStreakAchievement.toString());
+      
+      // Check for achievements to show notifications
+      if (newHasFrequentChatterAchievement && !user.hasFrequentChatterAchievement) {
+        showAchievementNotification("Achievement Unlocked!", "Frequent Chatter");
+      }
+      if (newHasStreakAchievement && !user.hasStreakAchievement) {
+        showAchievementNotification("Achievement Unlocked!", "3-Day Streak!");
       }
     }
 
@@ -171,6 +185,42 @@ function App() {
     prevScrollTop.current = container.scrollTop;
     prevScrollHeight.current = container.scrollHeight;
   }, [messages]);
+
+  // Effect to handle clicks outside the search results dropdown
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchInputRef.current && !searchInputRef.current.contains(event.target)) {
+        setShowSearchResults(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [searchInputRef]);
+
+  // Effect for the loading screen animation and transitioning to chat
+  useEffect(() => {
+    if (showLoadingScreen) {
+      const totalAnimationDuration = 2000 + 1000 + 500; // 3.5 seconds
+      const timer = setTimeout(() => {
+        setShowLoadingScreen(false);
+        setCurrentView('chat'); // Transition directly to chat screen after loading animation
+      }, totalAnimationDuration);
+      return () => clearTimeout(timer);
+    }
+  }, [showLoadingScreen]);
+
+  // Effect to automatically hide the achievement notification
+  useEffect(() => {
+    if (achievementNotification.isVisible) {
+      const timer = setTimeout(() => {
+        setAchievementNotification({ ...achievementNotification, isVisible: false });
+      }, 5000); // Hide after 5 seconds
+      return () => clearTimeout(timer);
+    }
+  }, [achievementNotification]);
 
   // Handler for toggling the hamburger menu
   const handleHamburgerClick = () => {
@@ -217,54 +267,52 @@ function App() {
     console.log("Selected category for API (first word, no emoji):", cleanedResult);
   };
 
-  // Effect to handle clicks outside the search results dropdown
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (searchInputRef.current && !searchInputRef.current.contains(event.target)) {
-        setShowSearchResults(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [searchInputRef]);
-
-  // Effect for the loading screen animation and transitioning to chat
-  useEffect(() => {
-    if (showLoadingScreen) {
-      const totalAnimationDuration = 2000 + 1000 + 500; // 3.5 seconds
-      const timer = setTimeout(() => {
-        setShowLoadingScreen(false);
-        setCurrentView('chat'); // Transition directly to chat screen after loading animation
-      }, totalAnimationDuration);
-      return () => clearTimeout(timer);
-    }
-  }, [showLoadingScreen]);
+  // Function to clear all user-specific data
+  const clearUserData = () => {
+    setUser(initialUserState);
+    setIsLoggedIn(false);
+    setIsUserDataReady(false);
+  };
 
   // Functions to switch between views and handle authentication
   const handleLoginSuccess = (username) => {
+    clearUserData(); // Reset all data before loading new data
+
     setIsLoggedIn(true);
-    setLoggedInUsername(username);
-    // Load the profile picture from local storage on successful login
-    setLoggedInUserProfilePic(localStorage.getItem('profilePictureUrl') || null);
-    // Reset message count on login for achievement tracking for this session
-    setMessageCount(0);
-    localStorage.setItem('messageCount', '0');
-    // Check if the frequent chatter achievement was already earned
-    setHasFrequentChatterAchievement(localStorage.getItem('hasFrequentChatterAchievement') === 'true');
+    // Now, load the data from local storage for the specific user
+    const userProfilePicUrl = localStorage.getItem(`profilePictureUrl_${username}`);
+    const userMessageCount = parseInt(localStorage.getItem(`messageCount_${username}`) || '0', 10);
+    const userFrequentChatterAchievement = localStorage.getItem(`hasFrequentChatterAchievement_${username}`) === 'true';
+    const userMessageStreak = parseInt(localStorage.getItem(`messageStreak_${username}`) || '0', 10);
+    const userLastMessageDate = localStorage.getItem(`lastMessageDate_${username}`);
+    const userStreakAchievement = localStorage.getItem(`hasStreakAchievement_${username}`) === 'true';
+
+    // Set the state with the newly loaded data
+    setUser({
+      username: username,
+      profilePic: userProfilePicUrl || null,
+      messageCount: userMessageCount,
+      hasFrequentChatterAchievement: userFrequentChatterAchievement,
+      messageStreak: userMessageStreak,
+      lastMessageDate: userLastMessageDate,
+      hasStreakAchievement: userStreakAchievement,
+    });
+    
+    setIsUserDataReady(true); // All data is loaded, safe to render
     setCurrentView('chat');
   };
 
   const handleSignupSuccess = (username) => {
-    setLoggedInUsername(username);
+    setUser(prev => ({ ...prev, username: username }));
     setCurrentView('login');
   };
 
   const handleUpdateProfilePic = (newUrl) => {
-    setLoggedInUserProfilePic(newUrl);
-    localStorage.setItem('profilePictureUrl', newUrl); // Store in localStorage
+    // Only update if a user is logged in
+    if (user.username) {
+      setUser(prev => ({ ...prev, profilePic: newUrl }));
+      localStorage.setItem(`profilePictureUrl_${user.username}`, newUrl); // Store with username key
+    }
   };
 
   const handleSwitchToSignup = () => {
@@ -293,12 +341,7 @@ function App() {
   };
 
   const handleLogout = () => {
-    setIsLoggedIn(false);
-    setLoggedInUsername(null);
-    setLoggedInUserProfilePic(null); // Clear profile pic on logout
-    // Keep the profile picture URL in localStorage for the next login
-    localStorage.removeItem('messageCount'); // Clear message count on logout
-    // Keep hasFrequentChatterAchievement as it's a permanent achievement
+    clearUserData();
     setMessages([{ text: "Hello! I'm your AgentGO assistant. How can I help you today?", sender: 'bot' }]); // Reset messages
     setCurrentView('login');
     closeSidebar();
@@ -320,8 +363,8 @@ function App() {
       case 'myAccount':
         return (
           <MyAccount
-            username={loggedInUsername}
-            currentProfilePic={loggedInUserProfilePic}
+            username={user.username}
+            currentProfilePic={user.profilePic}
             onUpdateProfilePic={handleUpdateProfilePic}
             onGoToChat={handleGoToChat}
           />
@@ -374,9 +417,9 @@ function App() {
 
                 <div className="assistant-info">
                   {/* Profile Picture Display */}
-                  {isLoggedIn && loggedInUserProfilePic && (
+                  {isLoggedIn && user.profilePic && (
                     <img
-                      src={loggedInUserProfilePic}
+                      src={user.profilePic}
                       alt="Profile"
                       className="profile-picture"
                       onError={(e) => { e.target.onerror = null; e.target.src="https://placehold.co/50x50/cccccc/ffffff?text=User"; }} // Fallback
@@ -384,40 +427,40 @@ function App() {
                   )}
                   <div className="assistant-details">
                     <h1>AgentGO</h1>
-                    {/* Achievements Section */}
-                    <div className="achievements-section">
-                      {isLoggedIn && (
+                    {/* Achievements Section - Now only renders when user data is ready */}
+                    {isLoggedIn && isUserDataReady && (
+                      <div className="achievements-section">
                         <div className="achievement-item">
                           <svg className="achievement-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
                           </svg>
                           <span className="achievement-text">Account Holder</span>
                         </div>
-                      )}
-                      {isLoggedIn && hasFrequentChatterAchievement && (
-                        <div className="achievement-item">
-                          <svg className="achievement-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                          </svg>
-                          <span className="achievement-text">Frequent Chatter</span>
-                        </div>
-                      )}
-                      {isLoggedIn && hasStreakAchievement && (
-                        <div className="achievement-item">
-                          <svg className="achievement-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-                          </svg>
-                          <span className="achievement-text">Streak Master</span>
-                        </div>
-                      )}
-                    </div>
+                        {user.hasFrequentChatterAchievement && (
+                          <div className="achievement-item">
+                            <svg className="achievement-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                            <span className="achievement-text">Frequent Chatter</span>
+                          </div>
+                        )}
+                        {user.hasStreakAchievement && (
+                          <div className="achievement-item">
+                            <svg className="achievement-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                            </svg>
+                            <span className="achievement-text">Streak Master</span>
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </div>
                 {/* Streak Display on the right side of the header */}
-                {isLoggedIn && messageStreak > 0 && (
+                {isLoggedIn && isUserDataReady && user.messageStreak > 0 && (
                   <div className="streak-display">
                     <span className="streak-icon" style={{ color: 'black', fontSize: '1.5rem' }} role="img" aria-label="Fire emoji">🔥</span>
-                    <span className="streak-count">{messageStreak}</span>
+                    <span className="streak-count">{user.messageStreak}</span>
                   </div>
                 )}
               </div>
@@ -450,6 +493,20 @@ function App() {
             </div>
 
             <div className="chat-container">
+              {/* Achievement Notification */}
+              {achievementNotification.isVisible && (
+                <div className="achievement-notification">
+                  <div className="notification-content">
+                    <div className="notification-header">
+                      <span className="notification-title">{achievementNotification.title}</span>
+                      <button className="close-notification-button" onClick={() => setAchievementNotification({ ...achievementNotification, isVisible: false })}>
+                        &times;
+                      </button>
+                    </div>
+                    <p className="notification-text">{achievementNotification.text}</p>
+                  </div>
+                </div>
+              )}
               <div className="chat-messages" ref={chatContainerRef}>
                 {messages.map(({ text, sender }, index) => (
                   <div key={index} className={`message ${sender}`}>
